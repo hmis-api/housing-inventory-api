@@ -1,0 +1,1961 @@
+#%RAML 0.8
+title: Housing Inventory
+version: 0.1.0
+baseUri: http://housinginventory.cloudhub.io
+schemas:
+- housing_inventory: !include housing_inventory_schema.json
+- housing_inventories: !include housing_inventories_schema.json
+- address: !include address_schema.json   
+
+/housing-units:
+  get:
+   description: gets housing units
+   queryParameters:
+      userId:
+        description: Filter the list of housing units by userId.
+        type: string
+        required: false
+        example: 1234
+      projectId:
+        description: Filter the list of housing units by projectId.
+        type: string
+        required: false
+        example: 1234
+      vacant:
+        description: Filter the list of housing units by vacant status.
+        type: boolean
+        required: false
+        example: true
+      inactive:
+        description: Filter the list of housing units by inactive status.
+        type: boolean
+        required: false
+        example: true
+      size:
+        description: Number of records in response.
+        type: integer
+        required: false
+        default: 30
+      page:
+        description: Page number 
+        type: integer
+        required: false
+        default: 0        
+   responses:
+      200:
+        body:
+          application/json:
+             schema: !include housing_inventories_schema.json
+             example: !include housing_inventories.json
+      500:
+        body:
+          application/json:
+            example: |
+              {
+                "errorMessage": "no housing inventory related to project id."
+              }          
+      401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }
+  post:
+   description: saves the multiple housing inventory.
+   body:
+    application/json:
+      schema: |
+        
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "inactive": {
+                    "type": "boolean"
+                  }
+                  "bedsCurrent": {
+                    "type": "integer"
+                  },
+                  "projectId": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  },
+                  "bedsCapacity": {
+                    "type": "integer"
+                  },
+                  "familyUnit": {
+                    "type": "boolean"
+                  },
+                  "inService": {
+                    "type": "boolean"
+                  },
+                  "vacant": {
+                    "type": "boolean"
+                  },
+                  "aliasName": {
+                    "type": "String"
+                  },
+                  "aliasName":{
+                      "type":"string"
+                  }
+                },
+                "required": [
+                  "inactive",
+                  "bedsCurrent",
+                  "projectId",
+                  "userId",
+                  "bedsCapacity",
+                  "familyUnit",
+                  "inService",
+                  "vacant",
+                  "aliasName"
+                ]
+              }
+            }
+      example: |
+              [
+                 {
+                    "inactive":false,
+                    "bedsCurrent":5,
+                    "projectId":"test-project",
+                    "userId":"shubas",
+                    "bedsCapacity":6,
+                    "familyUnit":false,
+                    "inService":false,
+                    "vacant":false,
+                     "aliasName":"Test Name"
+                 }
+              ]
+   responses:
+         200:
+          body:
+           application/json:
+            example: |
+                 [
+                   {
+                      "inactive":false,
+                      "housingInventoryId":"b7557434-6d2c-43c5-a002-665b95deaed8",
+                      "bedsCurrent":5,
+                      "projectId":"test-project",
+                      "userId":"shubas",
+                      "bedsCapacity":6,
+                      "familyUnit":false,
+                      "inService":false,
+                      "vacant":false,
+                      "aliasName":"Test Name"
+                   }
+                  ]
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }
+  put:
+   description: updates the housing inventory record.
+   body:
+      application/json:
+        schema: !include housing_inventory_schema.json
+        example: !include housing_inventory.json
+   responses:
+      200:
+       body:
+          application/json:
+            example: |
+              { "message": "Historical house unit data is updated in inventory"}
+      500:
+       body:
+         application/json:
+           example: |
+             {"message" : "Resource not found"}
+      401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }
+  /{housing_unit_uuid}:
+   description: housing inventory services for get,deactivate and delete.
+   displayName: retreive
+   get:
+    description: retreives inventory  details.
+    responses:
+      200:
+        body:
+          application/json:
+            schema: housing_inventory_schema.json
+            example: housing_invenory.json
+      500:
+        body:
+          application/json:
+            example: |
+              {
+                "errorMessage": "Housing unit not found."
+              } 
+      401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }                         
+   delete:
+      description: to delete housing inventory on the basis of uuid 
+      responses:
+        200:
+           body:
+            application/json:
+             example: |
+               {
+                 "message":"inventory successfully deleted"
+               } 
+        500:
+          body:
+           application/json:
+            example: |
+              {
+                "message":" Internal Server Error - retry request"
+              } 
+        401:
+           body:
+            application/json:
+             example: |
+               {
+                "message":" Unauthorized"
+               }           
+   put:
+      description: for updating housing inventory.
+      body:
+       application/json:
+        schema: !include housing_inventory_schema.json
+        example: !include housing_inventory.json
+        
+      responses:  
+         200:
+           body:
+            application/json:
+             example: |
+               {
+                 "message":"inventory successfully updated"
+               } 
+         500:
+          body:
+           application/json:
+            example: |
+              {
+                "message":" Internal Server Error - retry request"
+              } 
+         401:
+           body:
+            application/json:
+             example: |
+               {
+                "message":" Unauthorized"
+               }           
+   /addresses:
+    description: Updating address of housing inventory.
+    put:
+        
+          body:
+           application/json:
+            schema: !include address_schema.json
+            example: !include address.json
+          responses:
+            200:
+             body:
+               application/json:
+                  example: |
+                    { "message": "address is updated "}
+            500:
+             body:
+               application/json:
+                  example: |
+                   {"message" : "Resource not found"}
+            401:
+             body:
+               application/json:
+                  example: |
+                   {
+                    "message":" Unauthorized"
+                    }           
+    post:
+          body:
+           application/json:
+            schema: |
+                    {
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "type": "object",
+                      "properties": {
+                        "inactive": {
+                          "type": "boolean"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "line1": {
+                          "type": "string"
+                        },
+                        "line2": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "zipCode": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "inactive",
+                        "city",
+                        "line1",
+                        "line2",
+                        "state",
+                        "zipCode"
+                      ]
+                    }
+            example: |
+                    {
+                      "inactive": false,
+                      "city": "Austin",
+                      "line1": "test1",
+                      "line2": "test2",
+                      "state": "NY",
+                      "zipCode": 123
+                    }
+          responses:
+            200:
+             body:
+               application/json:
+                  example: |
+                    { "message": "address is updated "}
+            500:
+             body:
+               application/json:
+                  example: |
+                   {"message" : "Resource not found"}
+            401:
+             body:
+               application/json:
+                  example: |
+                   {
+                    "message":" Unauthorized"
+                    }          
+    get:
+      queryParameters:    
+       size:
+          description: Number of records in response.
+          type: integer
+          required: false
+          default: 30      
+       page:
+          description: Page number 
+          type: integer
+          required: false
+          default: 0        
+      responses:
+            200:
+             body:
+               application/json:
+                  schema: |
+                        {
+                            "$schema": "http://json-schema.org/draft-04/schema#",
+                            "type": "object",
+                            "properties": {
+                              "links": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "rel": {
+                                      "type": "string"
+                                    },
+                                    "href": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "rel",
+                                    "href"
+                                  ]
+                                }
+                              },
+                              "content": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "inactive": {
+                                      "type": "boolean"
+                                    },
+                                    "addressId": {
+                                      "type": "string"
+                                    },
+                                    "line1": {
+                                      "type": "string"
+                                    },
+                                    "line2": {
+                                      "type": "string"
+                                    },
+                                    "state": {
+                                      "type": "string"
+                                    },
+                                    "city": {
+                                      "type": "string"
+                                    },
+                                    "zipCode": {
+                                      "type": "integer"
+                                    },
+                                    "housingInventory": {
+                                      "type": "object",
+                                      "properties": {
+                                        "inactive": {
+                                          "type": "boolean"
+                                        },
+                                        "housingInventoryId": {
+                                          "type": "string"
+                                        },
+                                        "bedsCurrent": {
+                                          "type": "integer"
+                                        },
+                                        "projectId": {
+                                          "type": "string"
+                                        },
+                                        "userId": {
+                                          "type": "string"
+                                        },
+                                        "bedsCapacity": {
+                                          "type": "integer"
+                                        },
+                                        "familyUnit": {
+                                          "type": "boolean"
+                                        },
+                                        "inService": {
+                                          "type": "boolean"
+                                        },
+                                        "vacant": {
+                                          "type": "boolean"
+                                        }
+                                      },
+                                      "required": [
+                                        "inactive",
+                                        "housingInventoryId",
+                                        "bedsCurrent",
+                                        "projectId",
+                                        "userId",
+                                        "bedsCapacity",
+                                        "familyUnit",
+                                        "inService",
+                                        "vacant"
+                                      ]
+                                    },
+                                    "links": {
+                                      "type": "array",
+                                      "items": {}
+                                    }
+                                  },
+                                  "required": [
+                                    "inactive",
+                                    "addressId",
+                                    "line1",
+                                    "line2",
+                                    "state",
+                                    "city",
+                                    "zipCode",
+                                    "housingInventory",
+                                    "links"
+                                  ]
+                                }
+                              },
+                              "page": {
+                                "type": "object",
+                                "properties": {
+                                  "size": {
+                                    "type": "integer"
+                                  },
+                                  "totalElements": {
+                                    "type": "integer"
+                                  },
+                                  "totalPages": {
+                                    "type": "integer"
+                                  },
+                                  "number": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "size",
+                                  "totalElements",
+                                  "totalPages",
+                                  "number"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "links",
+                              "content",
+                              "page"
+                            ]
+                          }
+                  example: | 
+                      {
+                         "links":[
+                            {
+                               "rel":"first",
+                               "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/addresses?page=0&size=3"
+                            },
+                            {
+                               "rel":"self",
+                               "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/addresses?size=3"
+                            },
+                            {
+                               "rel":"next",
+                               "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/addresses?page=1&size=3"
+                            },
+                            {
+                               "rel":"last",
+                               "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/addresses?page=2&size=3"
+                            }
+                         ],
+                         "content":[
+                            {
+                               "inactive":false,
+                               "addressId":"a38af2cc-fa1f-4b6e-bb96-dbc34d0a5d8b",
+                               "line1":"test1",
+                               "line2":"test2",
+                               "state":"NY",
+                               "city":"Austin",
+                               "zipCode":123,
+                               "housingInventory":{
+                                  "inactive":false,
+                                  "housingInventoryId":"7a428e4e-d682-43ef-b2c7-383340ceb84e",
+                                  "bedsCurrent":5,
+                                  "projectId":"test-project",
+                                  "userId":"shubas",
+                                  "bedsCapacity":6,
+                                  "familyUnit":false,
+                                  "inService":false,
+                                  "vacant":false
+                               },
+                               "links":[
+                      
+                               ]
+                            },
+                            {
+                               "inactive":false,
+                               "addressId":"a38af2cc-fa1f-4b6e-bb96-dbc34d0a5d8b",
+                               "line1":"test1",
+                               "line2":"test2",
+                               "state":"NY",
+                               "city":"Austin",
+                               "zipCode":123,
+                               "housingInventory":{
+                                  "inactive":false,
+                                  "housingInventoryId":"7a428e4e-d682-43ef-b2c7-383340ceb84e",
+                                  "bedsCurrent":5,
+                                  "projectId":"test-project",
+                                  "userId":"shubas",
+                                  "bedsCapacity":6,
+                                  "familyUnit":false,
+                                  "inService":false,
+                                  "vacant":false
+                               },
+                               "links":[
+                      
+                               ]
+                            },
+                            {
+                               "inactive":false,
+                               "addressId":"a38af2cc-fa1f-4b6e-bb96-dbc34d0a5d8b",
+                               "line1":"test1",
+                               "line2":"test2",
+                               "state":"NY",
+                               "city":"Austin",
+                               "zipCode":123,
+                               "housingInventory":{
+                                  "inactive":false,
+                                  "housingInventoryId":"7a428e4e-d682-43ef-b2c7-383340ceb84e",
+                                  "bedsCurrent":5,
+                                  "projectId":"test-project",
+                                  "userId":"shubas",
+                                  "bedsCapacity":6,
+                                  "familyUnit":false,
+                                  "inService":false,
+                                  "vacant":false
+                               },
+                               "links":[
+                      
+                               ]
+                            }
+                         ],
+                         "page":{
+                            "size":3,
+                            "totalElements":8,
+                            "totalPages":3,
+                            "number":0
+                         }
+                      }
+            500:
+             body:
+               application/json:
+                  example: |
+                   {"message" : "Resource not found"}
+            401:
+             body:
+               application/json:
+                  example: |
+                   {
+                    "message":" Unauthorized"
+                    }          
+    delete:
+          responses:
+            200:
+             body:
+               application/json:
+                  example: |
+                    { "message": "Success "}
+            500:
+             body:
+               application/json:
+                  example: |
+                   {"message" : "Resource not found"}
+            401:
+             body:
+               application/json:
+                  example: |
+                   {
+                    "message":" Unauthorized"
+                    }    
+    /{id}:
+      get:
+       description: will get he data based on address_id.
+       responses:
+         200:
+          body:
+           application/json:
+            schema: !include address_schema.json
+            example: !include address.json
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }
+      put:
+       description: will update the address data.
+       body:
+        application/json:
+         schema: !include address_schema.json
+         example: !include address.json
+       responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "Assignments successfully saved."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }
+     
+      delete:
+       description: delete the record based on address_id.
+      
+       responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "address deleted successfully."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }        
+                              
+   /assignments:
+    post:
+     description: saves the multiple  assignment record.
+     body:
+      application/json:
+       schema: !include assignmentsSchema.json
+       example: !include assignments.json
+     responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "Assignments successfully saved."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }                  
+    get:
+     description: retreive all the assignment based on query params.
+     queryParameters:
+      client_id:
+        description: Filter the list of assignments by client_id.
+        type: string
+        required: false
+        example: 1234
+      household_id:
+        description: Filter the list of assignment by household_id.
+        type: string
+        required: false
+        example: 123
+      inactive:
+        description: Filter the list of assignments by inactive status.
+        type: boolean
+        required: false
+        example: true
+      size:
+        description: Number of records in response.
+        type: integer
+        required: false
+        default: 30      
+      page:
+        description: Page number 
+        type: integer
+        required: false
+        default: 0        
+
+     responses:
+      200:
+        body:
+          application/json:
+            schema : |
+                    {
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "type": "object",
+                      "properties": {
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "rel": {
+                                "type": "string"
+                              },
+                              "href": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "rel",
+                              "href"
+                            ]
+                          }
+                        },
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "inactive": {
+                                "type": "boolean"
+                              },
+                              "assignmentId": {
+                                "type": "string"
+                              },
+                              "clientId": {
+                                "type": "string"
+                              },
+                              "links": {
+                                "type": "array",
+                                "items": {}
+                              }
+                            },
+                            "required": [
+                              "inactive",
+                              "assignmentId",
+                              "clientId",
+                              "links"
+                            ]
+                          }
+                        },
+                        "page": {
+                          "type": "object",
+                          "properties": {
+                            "size": {
+                              "type": "integer"
+                            },
+                            "totalElements": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            },
+                            "number": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "size",
+                            "totalElements",
+                            "totalPages",
+                            "number"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "links",
+                        "content",
+                        "page"
+                      ]
+                    }
+            example: |
+              {
+               "links":[
+                  {
+                     "rel":"first",
+                     "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/assignments?page=0&size=3"
+                  },
+                  {
+                     "rel":"self",
+                     "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/assignments?size=3"
+                  },
+                  {
+                     "rel":"next",
+                     "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/assignments?page=1&size=3"
+                  },
+                  {
+                     "rel":"last",
+                     "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/7a428e4e-d682-43ef-b2c7-383340ceb84e/assignments?page=2&size=3"
+                  }
+               ],
+               "content":[
+                  {
+                     "inactive":false,
+                     "assignmentId":"75d14bfe-405c-4d29-ae12-6c72243855a7",
+                     "clientId":"xyz",
+                     "links":[
+            
+                     ]
+                  },
+                  {
+                     "inactive":false,
+                     "assignmentId":"bfed0675-3dbe-448b-8358-c8459415deee",
+                     "clientId":"xyz",
+                     "links":[
+            
+                     ]
+                  },
+                  {
+                     "inactive":false,
+                     "assignmentId":"d2a77c3f-51fd-4ee4-ac9c-07589d607e18",
+                     "clientId":"xyz",
+                     "links":[
+            
+                     ]
+                  }
+               ],
+               "page":{
+                  "size":3,
+                  "totalElements":8,
+                  "totalPages":3,
+                  "number":0
+                 }
+              }
+      500:
+        body:
+          application/json:
+            example: |
+              {
+                "errorMessage": "Assignments not found."
+              } 
+      401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }                
+                    
+    put:
+      description: will update the assignments.
+      body:
+       application/json:
+        schema: !include assignmentsSchema.json
+        example: !include assignments.json
+      responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "Assignments successfully updated."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }                
+    delete:
+      description: saves the multiple assignment records.
+      body:
+       application/json:
+        schema: !include assignmentsSchema.json
+        example: !include assignments.json
+      responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "Assignments successfully deleted."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }                
+    /{id}:
+     get:
+       description: get the assignment record based on assignment_id.
+       responses:
+         200:
+          body:
+           application/json:
+            example: !include assignment.json
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }                      
+     put:
+       description: update the assignment record.
+       body:
+        application/json:
+         schema: !include assignmentSchema.json
+         example: !include assignment.json
+       responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "Assignments successfully updated."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }
+     
+     delete:
+      description: delete the assignment.
+      
+      responses:
+         200:
+          body:
+           application/json:
+            example: |
+              { "message": "Assignments deleted successfully."}
+         500:
+          body:
+            application/json:
+             example: |
+              {"message" : "Resource not found"}
+         401:
+           body:
+            application/json:
+             example: |
+              {
+                "message":" Unauthorized"
+              }             
+/projects/{projectid}/eligibilityrequirements:
+  post:
+    description: |
+                TO create an eligibility requirment.
+    body:
+      application/json:
+          schema: |
+                {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                    "servesSingles": {
+                      "type": "boolean"
+                    },
+                    "servesHouseholdWithChildren": {
+                      "type": "boolean"
+                    },
+                    "incomeRequirement": {
+                      "type": "boolean"
+                    },
+                    "alcoholAbuse": {
+                      "type": "boolean"
+                    },
+                    "bothAlcoholAndDrugAbuse": {
+                      "type": "boolean"
+                    },
+                    "chronicHealthCondition": {
+                      "type": "boolean"
+                    },
+                    "developmental": {
+                      "type": "boolean"
+                    },
+                    "drugAbuse": {
+                      "type": "boolean"
+                    },
+                    "mentalHealthProblem": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "gender": {
+                      "type": "integer"
+                    },
+                    "minAge": {
+                      "type": "integer"
+                    },
+                    "maxAge": {
+                      "type": "integer"
+                    },
+                    "minimumIncome": {
+                      "type": "integer"
+                    },
+                    "maximumIncome": {
+                      "type": "integer"
+                    },
+                    "zipCode": {
+                      "type": "string"
+                    },
+                    "disability": {
+                      "type": "string"
+                    },
+                    "chronicallyHomeless": {
+                      "type": "string"
+                    },
+                    "race": {
+                      "type": "string"
+                    },
+                    "ethnicity": {
+                      "type": "string"
+                    },
+                    "veteranStatus": {
+                      "type": "string"
+                    },
+                    "housingStatus": {
+                      "type": "string"
+                    },
+                    "monthsHomelessPastThreeYears": {
+                      "type": "string"
+                    },
+                    "residencePrior": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "servesSingles",
+                    "servesHouseholdWithChildren",
+                    "incomeRequirement",
+                    "alcoholAbuse",
+                    "bothAlcoholAndDrugAbuse",
+                    "chronicHealthCondition",
+                    "developmental",
+                    "drugAbuse",
+                    "mentalHealthProblem",
+                    "type",
+                    "gender",
+                    "minAge",
+                    "maxAge",
+                    "minimumIncome",
+                    "maximumIncome",
+                    "zipCode",
+                    "disability",
+                    "chronicallyHomeless",
+                    "race",
+                    "ethnicity",
+                    "veteranStatus",
+                    "housingStatus",
+                    "monthsHomelessPastThreeYears",
+                    "residencePrior"
+                  ]
+                }
+          example:  |
+                {
+                   "servesSingles":true,
+                   "servesHouseholdWithChildren":false,
+                   "incomeRequirement":false,
+                   "alcoholAbuse":true,
+                   "bothAlcoholAndDrugAbuse":false,
+                   "chronicHealthCondition":false,
+                   "developmental":true,
+                   "drugAbuse":false,
+                   "mentalHealthProblem":true,
+                   "type":"test",
+                   "gender":0,
+                   "minAge":10,
+                   "maxAge":40,
+                   "minimumIncome":100000,
+                   "maximumIncome":10000000000,
+                   "zipCode":"12345",
+                   "disability":"ONE",
+                   "chronicallyHomeless":"ONE",
+                   "race":"ONE",
+                   "ethnicity":"ONE",
+                   "veteranStatus":"ONE",
+                   "housingStatus":"ONE",
+                   "monthsHomelessPastThreeYears":"SEVEN",
+                   "residencePrior":"ONE"
+                }
+    responses:
+        200:
+            body:
+                application/json:
+                  schema: |
+                        {
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "type": "object",
+                          "properties": {
+                            "eligibilityRequirementId": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "gender": {
+                              "type": "string"
+                            },
+                            "servesSingles": {
+                              "type": "boolean"
+                            },
+                            "servesHouseholdWithChildren": {
+                              "type": "boolean"
+                            },
+                            "minAge": {
+                              "type": "integer"
+                            },
+                            "maxAge": {
+                              "type": "integer"
+                            },
+                            "incomeRequirement": {
+                              "type": "boolean"
+                            },
+                            "minimumIncome": {
+                              "type": "integer"
+                            },
+                            "maximumIncome": {
+                              "type": "integer"
+                            },
+                            "zipCode": {
+                              "type": "string"
+                            },
+                            "disability": {
+                              "type": "string"
+                            },
+                            "alcoholAbuse": {
+                              "type": "boolean"
+                            },
+                            "bothAlcoholAndDrugAbuse": {
+                              "type": "boolean"
+                            },
+                            "chronicHealthCondition": {
+                              "type": "boolean"
+                            },
+                            "developmental": {
+                              "type": "boolean"
+                            },
+                            "drugAbuse": {
+                              "type": "boolean"
+                            },
+                            "mentalHealthProblem": {
+                              "type": "boolean"
+                            },
+                            "chronicallyHomeless": {
+                              "type": "string"
+                            },
+                            "race": {
+                              "type": "string"
+                            },
+                            "ethnicity": {
+                              "type": "string"
+                            },
+                            "veteranStatus": {
+                              "type": "string"
+                            },
+                            "housingStatus": {
+                              "type": "string"
+                            },
+                            "monthsHomelessPastThreeYears": {
+                              "type": "string"
+                            },
+                            "residencePrior": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "eligibilityRequirementId",
+                            "type",
+                            "gender",
+                            "servesSingles",
+                            "servesHouseholdWithChildren",
+                            "minAge",
+                            "maxAge",
+                            "incomeRequirement",
+                            "minimumIncome",
+                            "maximumIncome",
+                            "zipCode",
+                            "disability",
+                            "alcoholAbuse",
+                            "bothAlcoholAndDrugAbuse",
+                            "chronicHealthCondition",
+                            "developmental",
+                            "drugAbuse",
+                            "mentalHealthProblem",
+                            "chronicallyHomeless",
+                            "race",
+                            "ethnicity",
+                            "veteranStatus",
+                            "housingStatus",
+                            "monthsHomelessPastThreeYears",
+                            "residencePrior"
+                          ]
+                        }                  
+                  example: |
+                          {
+                             "eligibilityRequirementId":"f580935c-01e0-4d51-9b8d-7590bf204058",
+                             "type":"test",
+                             "gender":"ZERO",
+                             "servesSingles":true,
+                             "servesHouseholdWithChildren":false,
+                             "minAge":10,
+                             "maxAge":40,
+                             "incomeRequirement":false,
+                             "minimumIncome":100000,
+                             "maximumIncome":10000000000,
+                             "zipCode":"12345",
+                             "disability":"ONE",
+                             "alcoholAbuse":true,
+                             "bothAlcoholAndDrugAbuse":false,
+                             "chronicHealthCondition":false,
+                             "developmental":true,
+                             "drugAbuse":false,
+                             "mentalHealthProblem":true,
+                             "chronicallyHomeless":"ONE",
+                             "race":"TWO",
+                             "ethnicity":"ONE",
+                             "veteranStatus":"ONE",
+                             "housingStatus":"TWO",
+                             "monthsHomelessPastThreeYears":"ONE_HUNDRED_FOUR",
+                             "residencePrior":"TWO"
+                          }                          
+              
+        400:
+            body:
+                application/json:
+                  schema: |
+                      {
+                        "$schema": "http://json-schema.org/draft-04/schema#",
+                        "type": "object",
+                        "properties": {
+                          "error": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "message": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "message"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "error"
+                        ]
+                      }
+                  example: |
+                      {"error":[{"message":"Minimum Income must be greater than or equal to 0"},{"message":"Maximum Age must be greater than 0"}]}
+  get:
+    description: |
+          To retrive eligibility requirements of a project.
+    queryParameters:    
+     size:
+        description: Number of records in response.
+        type: integer
+        required: false
+        default: 30      
+     page:
+        description: Page number 
+        type: integer
+        required: false
+        default: 0        
+    responses:
+      200:
+        body:
+          application/json:
+              schema: |
+                    {
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "type": "object",
+                      "properties": {
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "rel": {
+                                "type": "string"
+                              },
+                              "href": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "rel",
+                              "href"
+                            ]
+                          }
+                        },
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "gender": {
+                                "type": "string"
+                              },
+                              "servesSingles": {
+                                "type": "boolean"
+                              },
+                              "servesHouseholdWithChildren": {
+                                "type": "boolean"
+                              },
+                              "minAge": {
+                                "type": "integer"
+                              },
+                              "maxAge": {
+                                "type": "integer"
+                              },
+                              "incomeRequirement": {
+                                "type": "boolean"
+                              },
+                              "minimumIncome": {
+                                "type": "integer"
+                              },
+                              "maximumIncome": {
+                                "type": "integer"
+                              },
+                              "zipCode": {
+                                "type": "string"
+                              },
+                              "disability": {
+                                "type": "string"
+                              },
+                              "alcoholAbuse": {
+                                "type": "boolean"
+                              },
+                              "bothAlcoholAndDrugAbuse": {
+                                "type": "boolean"
+                              },
+                              "chronicHealthCondition": {
+                                "type": "boolean"
+                              },
+                              "developmental": {
+                                "type": "boolean"
+                              },
+                              "drugAbuse": {
+                                "type": "boolean"
+                              },
+                              "mentalHealthProblem": {
+                                "type": "boolean"
+                              },
+                              "chronicallyHomeless": {
+                                "type": "string"
+                              },
+                              "race": {
+                                "type": "string"
+                              },
+                              "ethnicity": {
+                                "type": "string"
+                              },
+                              "veteranStatus": {
+                                "type": "string"
+                              },
+                              "housingStatus": {
+                                "type": "string"
+                              },
+                              "monthsHomelessPastThreeYears": {
+                                "type": "string"
+                              },
+                              "residencePrior": {
+                                "type": "string"
+                              },
+                              "links": {
+                                "type": "array",
+                                "items": {}
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "gender",
+                              "servesSingles",
+                              "servesHouseholdWithChildren",
+                              "minAge",
+                              "maxAge",
+                              "incomeRequirement",
+                              "minimumIncome",
+                              "maximumIncome",
+                              "zipCode",
+                              "disability",
+                              "alcoholAbuse",
+                              "bothAlcoholAndDrugAbuse",
+                              "chronicHealthCondition",
+                              "developmental",
+                              "drugAbuse",
+                              "mentalHealthProblem",
+                              "chronicallyHomeless",
+                              "race",
+                              "ethnicity",
+                              "veteranStatus",
+                              "housingStatus",
+                              "monthsHomelessPastThreeYears",
+                              "residencePrior",
+                              "links"
+                            ]
+                          }
+                        },
+                        "page": {
+                          "type": "object",
+                          "properties": {
+                            "size": {
+                              "type": "integer"
+                            },
+                            "totalElements": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            },
+                            "number": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "size",
+                            "totalElements",
+                            "totalPages",
+                            "number"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "links",
+                        "content",
+                        "page"
+                      ]
+                    }
+              example: |
+                  {
+                     "links":[
+                        {
+                           "rel":"first",
+                           "href":"https://www.hmislynk.com/inventory-api/projects/cf9592af-1bf5-4839-a0bd-da24dfb239e0/eligibilityrequirements?page=0&size=3"
+                        },
+                        {
+                           "rel":"self",
+                           "href":"https://www.hmislynk.com/inventory-api/projects/cf9592af-1bf5-4839-a0bd-da24dfb239e0/eligibilityrequirements?size=3"
+                        },
+                        {
+                           "rel":"next",
+                           "href":"https://www.hmislynk.com/inventory-api/projects/cf9592af-1bf5-4839-a0bd-da24dfb239e0/eligibilityrequirements?page=1&size=3"
+                        },
+                        {
+                           "rel":"last",
+                           "href":"https://www.hmislynk.com/inventory-api/projects/cf9592af-1bf5-4839-a0bd-da24dfb239e0/eligibilityrequirements?page=2&size=3"
+                        }
+                     ],
+                     "content":[
+                        {
+                           "type":"test",
+                           "gender":"ZERO",
+                           "servesSingles":true,
+                           "servesHouseholdWithChildren":false,
+                           "minAge":10,
+                           "maxAge":40,
+                           "incomeRequirement":false,
+                           "minimumIncome":100000,
+                           "maximumIncome":10000000000,
+                           "zipCode":"12345",
+                           "disability":"ONE",
+                           "alcoholAbuse":true,
+                           "bothAlcoholAndDrugAbuse":false,
+                           "chronicHealthCondition":false,
+                           "developmental":true,
+                           "drugAbuse":false,
+                           "mentalHealthProblem":true,
+                           "chronicallyHomeless":"ONE",
+                           "race":"TWO",
+                           "ethnicity":"ONE",
+                           "veteranStatus":"ONE",
+                           "housingStatus":"TWO",
+                           "monthsHomelessPastThreeYears":"ONE_HUNDRED_FOUR",
+                           "residencePrior":"TWO",
+                           "links":[
+                  
+                           ]
+                        },
+                        {
+                           "type":"test",
+                           "gender":"ZERO",
+                           "servesSingles":true,
+                           "servesHouseholdWithChildren":false,
+                           "minAge":10,
+                           "maxAge":40,
+                           "incomeRequirement":false,
+                           "minimumIncome":5,
+                           "maximumIncome":10000000000,
+                           "zipCode":"12345",
+                           "disability":"ONE",
+                           "alcoholAbuse":true,
+                           "bothAlcoholAndDrugAbuse":false,
+                           "chronicHealthCondition":false,
+                           "developmental":true,
+                           "drugAbuse":false,
+                           "mentalHealthProblem":true,
+                           "chronicallyHomeless":"ONE",
+                           "race":"TWO",
+                           "ethnicity":"ONE",
+                           "veteranStatus":"ONE",
+                           "housingStatus":"TWO",
+                           "monthsHomelessPastThreeYears":"ONE_HUNDRED_FOUR",
+                           "residencePrior":"TWO",
+                           "links":[
+                  
+                           ]
+                        },
+                        {
+                           "type":"test",
+                           "gender":"ZERO",
+                           "servesSingles":true,
+                           "servesHouseholdWithChildren":false,
+                           "minAge":10,
+                           "maxAge":40,
+                           "incomeRequirement":false,
+                           "minimumIncome":5,
+                           "maximumIncome":10000000000,
+                           "zipCode":"12345",
+                           "disability":"ONE",
+                           "alcoholAbuse":true,
+                           "bothAlcoholAndDrugAbuse":false,
+                           "chronicHealthCondition":false,
+                           "developmental":true,
+                           "drugAbuse":false,
+                           "mentalHealthProblem":true,
+                           "chronicallyHomeless":"ONE",
+                           "race":"TWO",
+                           "ethnicity":"ONE",
+                           "veteranStatus":"ONE",
+                           "housingStatus":"TWO",
+                           "monthsHomelessPastThreeYears":"ONE_HUNDRED_FOUR",
+                           "residencePrior":"TWO",
+                           "links":[
+                  
+                           ]
+                        }
+                     ],
+                     "page":{
+                        "size":3,
+                        "totalElements":8,
+                        "totalPages":3,
+                        "number":0
+                     }
+                  }
+              
+/projects/{projectid}/eligibilityrequirements/{requirementid}:
+  put:
+    description: |
+          To update existing eligibility requirment
+    body:
+      application/json: 
+        example: |
+                  {
+                     "type":"test",
+                     "gender":"ZERO",
+                     "servesSingles":true,
+                     "servesHouseholdWithChildren":false,
+                     "minAge":10,
+                     "maxAge":40,
+                     "incomeRequirement":false,
+                     "minimumIncome":100000,
+                     "maximumIncome":10000000000,
+                     "zipCode":"12345",
+                     "disability":"ONE",
+                     "alcoholAbuse":true,
+                     "bothAlcoholAndDrugAbuse":false,
+                     "chronicHealthCondition":false,
+                     "developmental":true,
+                     "drugAbuse":false,
+                     "mentalHealthProblem":true,
+                     "chronicallyHomeless":"ONE",
+                     "race":"TWO",
+                     "ethnicity":"ONE",
+                     "veteranStatus":"ONE",
+                     "housingStatus":"TWO",
+                     "monthsHomelessPastThreeYears":"ONE_HUNDRED_FOUR",
+                     "residencePrior":"TWO"
+                  }
+        schema: |
+          {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "eligibilityRequirementId": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "gender": {
+                  "type": "string"
+                },
+                "servesSingles": {
+                  "type": "boolean"
+                },
+                "servesHouseholdWithChildren": {
+                  "type": "boolean"
+                },
+                "minAge": {
+                  "type": "integer"
+                },
+                "maxAge": {
+                  "type": "integer"
+                },
+                "incomeRequirement": {
+                  "type": "boolean"
+                },
+                "minimumIncome": {
+                  "type": "integer"
+                },
+                "maximumIncome": {
+                  "type": "integer"
+                },
+                "zipCode": {
+                  "type": "string"
+                },
+                "disability": {
+                  "type": "string"
+                },
+                "alcoholAbuse": {
+                  "type": "boolean"
+                },
+                "bothAlcoholAndDrugAbuse": {
+                  "type": "boolean"
+                },
+                "chronicHealthCondition": {
+                  "type": "boolean"
+                },
+                "developmental": {
+                  "type": "boolean"
+                },
+                "drugAbuse": {
+                  "type": "boolean"
+                },
+                "mentalHealthProblem": {
+                  "type": "boolean"
+                },
+                "chronicallyHomeless": {
+                  "type": "string"
+                },
+                "race": {
+                  "type": "string"
+                },
+                "ethnicity": {
+                  "type": "string"
+                },
+                "veteranStatus": {
+                  "type": "string"
+                },
+                "housingStatus": {
+                  "type": "string"
+                },
+                "monthsHomelessPastThreeYears": {
+                  "type": "string"
+                },
+                "residencePrior": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "eligibilityRequirementId",
+                "type",
+                "gender",
+                "servesSingles",
+                "servesHouseholdWithChildren",
+                "minAge",
+                "maxAge",
+                "incomeRequirement",
+                "minimumIncome",
+                "maximumIncome",
+                "zipCode",
+                "disability",
+                "alcoholAbuse",
+                "bothAlcoholAndDrugAbuse",
+                "chronicHealthCondition",
+                "developmental",
+                "drugAbuse",
+                "mentalHealthProblem",
+                "chronicallyHomeless",
+                "race",
+                "ethnicity",
+                "veteranStatus",
+                "housingStatus",
+                "monthsHomelessPastThreeYears",
+                "residencePrior"
+              ]
+            }
+    responses:  
+      200:
+      400:
+          body:
+              application/json:
+                schema: |
+                    {
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "message"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "error"
+                      ]
+                    }
+                example: |
+                    {"error":[{"message":"Minimum Income must be greater than or equal to 0"},{"message":"Maximum Age must be greater than 0"}]}
+
+                                  
+  delete:
+    description: |
+        To delete an eligibility requirement.
+    responses:  
+      200:
+  get:
+    description: |
+            To get selected eligibility requirement.
+    responses:
+      200:
+        body:
+          application/json: 
+            example: |
+                      {
+                         "eligibilityRequirementId":"f580935c-01e0-4d51-9b8d-7590bf204058",
+                         "type":"test",
+                         "gender":"ZERO",
+                         "servesSingles":true,
+                         "servesHouseholdWithChildren":false,
+                         "minAge":10,
+                         "maxAge":40,
+                         "incomeRequirement":false,
+                         "minimumIncome":100000,
+                         "maximumIncome":10000000000,
+                         "zipCode":"12345",
+                         "disability":"ONE",
+                         "alcoholAbuse":true,
+                         "bothAlcoholAndDrugAbuse":false,
+                         "chronicHealthCondition":false,
+                         "developmental":true,
+                         "drugAbuse":false,
+                         "mentalHealthProblem":true,
+                         "chronicallyHomeless":"ONE",
+                         "race":"TWO",
+                         "ethnicity":"ONE",
+                         "veteranStatus":"ONE",
+                         "housingStatus":"TWO",
+                         "monthsHomelessPastThreeYears":"ONE_HUNDRED_FOUR",
+                         "residencePrior":"TWO"
+                      }
+            schema: |
+              {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                    "eligibilityRequirementId": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "gender": {
+                      "type": "string"
+                    },
+                    "servesSingles": {
+                      "type": "boolean"
+                    },
+                    "servesHouseholdWithChildren": {
+                      "type": "boolean"
+                    },
+                    "minAge": {
+                      "type": "integer"
+                    },
+                    "maxAge": {
+                      "type": "integer"
+                    },
+                    "incomeRequirement": {
+                      "type": "boolean"
+                    },
+                    "minimumIncome": {
+                      "type": "integer"
+                    },
+                    "maximumIncome": {
+                      "type": "integer"
+                    },
+                    "zipCode": {
+                      "type": "string"
+                    },
+                    "disability": {
+                      "type": "string"
+                    },
+                    "alcoholAbuse": {
+                      "type": "boolean"
+                    },
+                    "bothAlcoholAndDrugAbuse": {
+                      "type": "boolean"
+                    },
+                    "chronicHealthCondition": {
+                      "type": "boolean"
+                    },
+                    "developmental": {
+                      "type": "boolean"
+                    },
+                    "drugAbuse": {
+                      "type": "boolean"
+                    },
+                    "mentalHealthProblem": {
+                      "type": "boolean"
+                    },
+                    "chronicallyHomeless": {
+                      "type": "string"
+                    },
+                    "race": {
+                      "type": "string"
+                    },
+                    "ethnicity": {
+                      "type": "string"
+                    },
+                    "veteranStatus": {
+                      "type": "string"
+                    },
+                    "housingStatus": {
+                      "type": "string"
+                    },
+                    "monthsHomelessPastThreeYears": {
+                      "type": "string"
+                    },
+                    "residencePrior": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "eligibilityRequirementId",
+                    "type",
+                    "gender",
+                    "servesSingles",
+                    "servesHouseholdWithChildren",
+                    "minAge",
+                    "maxAge",
+                    "incomeRequirement",
+                    "minimumIncome",
+                    "maximumIncome",
+                    "zipCode",
+                    "disability",
+                    "alcoholAbuse",
+                    "bothAlcoholAndDrugAbuse",
+                    "chronicHealthCondition",
+                    "developmental",
+                    "drugAbuse",
+                    "mentalHealthProblem",
+                    "chronicallyHomeless",
+                    "race",
+                    "ethnicity",
+                    "veteranStatus",
+                    "housingStatus",
+                    "monthsHomelessPastThreeYears",
+                    "residencePrior"
+                  ]
+                }
+                            

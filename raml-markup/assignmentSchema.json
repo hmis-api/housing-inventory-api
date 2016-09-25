@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "dateCreated": {
+      "type": "string"
+    },
+    "dateUpdated": {
+      "type": "string"
+    },
+    "inactive": {
+      "type": "boolean"
+    },
+    "assignmentId": {
+      "type": "string"
+    },
+    "clientId": {
+      "type": "string"
+    },
+    "householdId": {
+      "type": "string"
+    },
+    "checkoutDate": {
+      "type": "null"
+    },
+    "housingInventoryId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "dateCreated",
+    "dateUpdated",
+    "inactive",
+    "assignmentId",
+    "clientId",
+    "householdId",
+    "checkoutDate",
+    "housingInventoryId"
+  ]
+}

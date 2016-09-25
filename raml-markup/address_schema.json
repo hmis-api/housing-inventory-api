@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "dateCreated": {
+      "type": "string"
+    },
+    "dateUpdated": {
+      "type": "string"
+    },
+    "inactive": {
+      "type": "boolean"
+    },
+    "addressId": {
+      "type": "string"
+    },
+    "line1": {
+      "type": "string"
+    },
+    "line2": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "integer"
+    },
+    "housingInventoryId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "dateCreated",
+    "dateUpdated",
+    "inactive",
+    "addressId",
+    "line1",
+    "line2",
+    "state",
+    "city",
+    "zipCode",
+    "housingInventoryId"
+  ]
+}
