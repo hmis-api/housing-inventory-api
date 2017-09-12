@@ -23,7 +23,7 @@
         "type": "string"
       },
       "checkoutDate": {
-        "type": "null"
+        "type": "string"
       },
       "housingInventoryId": {
         "type": "string"

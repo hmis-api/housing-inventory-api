@@ -1,8 +1,10 @@
 {
+    "dateCreated":"03-03-2016",
+    "dateUpdated":"03-03-2016",
     "inactive": false,
     "assignmentId": "936a11e4-12e6-4f36-ab3d-3ae9480d221d",
     "clientId": "abc-86adsf",
     "householdId": "add-adf",
-    "checkoutDate": null,
+    "checkoutDate": "03-03-2016",
     "housingInventoryId": "8e656b38-4465-4e27-ab89-6dedf28890b0"
   }

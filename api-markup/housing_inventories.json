@@ -2,19 +2,19 @@
    "links":[
       {
          "rel":"first",
-         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=0&size=3"
+         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=0&size=2"
       },
       {
          "rel":"self",
-         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=0&size=3"
+         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=0&size=2"
       },
       {
          "rel":"next",
-         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=1&size=3"
+         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=1&size=2"
       },
       {
          "rel":"last",
-         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=13&size=3"
+         "href":"https://www.hmislynk.com/inventory-api/rest/housing-units/?page=20&size=2"
       }
    ],
    "content":[
@@ -28,7 +28,7 @@
          "familyUnit":false,
          "inService":false,
          "vacant":false,
-         "aliasName":"Test Name"
+         "aliasName":"Test Name",
          "links":[
 
          ]
@@ -40,22 +40,19 @@
          "projectId":"test-project",
          "userId":"shubas",
          "bedsCapacity":6,
-         "links":[
-
-         ]
-      },
-      {
-         "inactive":false,
-         "housingInventoryId":"1c7f4d3a-1c47-4b72-9853-736c524f49bf",
+         "familyUnit":false,
+         "inService":false,
+         "vacant":false,
+         "aliasName":"Test2 Name",
          "links":[
 
          ]
       }
    ],
    "page":{
-      "size":3,
+      "size":2,
       "totalElements":42,
-      "totalPages":14,
+      "totalPages":21,
       "number":0
    }
 }
