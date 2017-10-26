@@ -1,14 +1,52 @@
-                 [
-                   {
-                      "inactive":false,
-                      "housingInventoryId":"b7557434-6d2c-43c5-a002-665b95deaed8",
-                      "bedsCurrent":5,
-                      "projectId":"b7557445-6d2c-43c5-a002-665b95deaed8",
-                      "userId":"shubas",
-                      "bedsCapacity":8,
-                      "familyUnit":false,
-                      "inService":false,
-                      "vacant":false,
-                      "aliasName":"Test Name"
-                   }
-                  ]
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "inactive": {
+        "type": "boolean"
+      },
+      "housingInventoryId": {
+        "type": "string"
+      },
+      "bedsCurrent": {
+        "type": "integer"
+      },
+      "projectId": {
+        "type": "string"
+      },
+      "userId": {
+        "type": "string"
+      },
+      "bedsCapacity": {
+        "type": "integer"
+      },
+      "familyUnit": {
+        "type": "boolean"
+      },
+      "inService": {
+        "type": "boolean"
+      },
+      "vacant": {
+        "type": "boolean"
+      },
+      
+      "aliasName":{
+        "type":"string"
+      }
+    },
+    "required": [
+      "inactive",
+      "housingInventoryId",
+      "bedsCurrent",
+      "projectId",
+      "userId",
+      "bedsCapacity",
+      "familyUnit",
+      "inService",
+      "vacant",
+      "aliasName"
+    ]
+  }
+}

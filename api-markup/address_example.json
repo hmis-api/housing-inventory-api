@@ -1,0 +1,12 @@
+{
+  "dateCreated":"03-03-2016",
+  "dateUpdated":"03-03-2016",
+  "inactive":false,
+  "addressId":"620ef25c-c9db-41fd-b799-fc3691f0d3b4",
+  "city":"Austin",
+  "line1":"test1",
+  "line2":"test2",
+  "state":"NY",
+  "zipCode":123,
+  "housingInventoryId":"620ef25c-c9db-41fd-b799-fc3691f0d3b4"
+}

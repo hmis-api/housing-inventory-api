@@ -1,12 +1,48 @@
 {
-  "dateCreated":"03-03-2016",
-  "dateUpdated":"03-03-2016",
-  "inactive":false,
-  "addressId":"620ef25c-c9db-41fd-b799-fc3691f0d3b4",
-  "city":"Austin",
-  "line1":"test1",
-  "line2":"test2",
-  "state":"NY",
-  "zipCode":123,
-  "housingInventoryId":"620ef25c-c9db-41fd-b799-fc3691f0d3b4"
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "dateCreated": {
+      "type": "string"
+    },
+    "dateUpdated": {
+      "type": "string"
+    },
+    "inactive": {
+      "type": "boolean"
+    },
+    "addressId": {
+      "type": "string"
+    },
+    "line1": {
+      "type": "string"
+    },
+    "line2": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "integer"
+    },
+    "housingInventoryId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "dateCreated",
+    "dateUpdated",
+    "inactive",
+    "addressId",
+    "line1",
+    "line2",
+    "state",
+    "city",
+    "zipCode",
+    "housingInventoryId"
+  ]
 }
