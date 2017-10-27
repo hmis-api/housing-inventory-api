@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "match_reservation": {
+      "id": "http://jsonschema.net/match_reservation",
+      "type": "object",
+      "properties": {
+        "reservation_id": {
+          "id": "http://jsonschema.net/match_reservation/reservation_id",
+          "type": "string"
+        },
+        "housing_unit_id": {
+          "id": "http://jsonschema.net/match_reservation/housing_unit_id",
+          "type": "string"
+        },
+        "match_date": {
+          "id": "http://jsonschema.net/match_reservation/match_date",
+          "type": "string"
+        },
+        "match_status": {
+          "id": "http://jsonschema.net/match_reservation/match_status",
+          "type": "boolean"
+        },
+        "reservation_children": {
+          "id": "http://jsonschema.net/match_reservation/reservation_children",
+          "type": "integer"
+        },
+        "reservation_adult": {
+          "id": "http://jsonschema.net/match_reservation/reservation_adult",
+          "type": "integer"
+        },
+        "manual_match": {
+          "id": "http://jsonschema.net/match_reservation/manual_match",
+          "type": "boolean"
+        },
+        "inactive": {
+          "id": "http://jsonschema.net/match_reservation/inactive",
+          "type": "boolean"
+        },
+        "date_created": {
+          "id": "http://jsonschema.net/match_reservation/date_created",
+          "type": "string"
+        },
+        "date_updated": {
+          "id": "http://jsonschema.net/match_reservation/date_updated",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reservation_id",
+        "housing_unit_id",
+        "match_date",
+        "match_status",
+        "reservation_children",
+        "reservation_adult",
+        "manual_match",
+        "inactive",
+        "date_created",
+        "date_updated"
+      ]
+    }
+  },
+  "required": [
+    "match_reservation"
+  ]
+}

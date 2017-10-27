@@ -1,0 +1,14 @@
+                 [
+                   {
+                      "inactive":false,
+                      "housingInventoryId":"b7557434-6d2c-43c5-a002-665b95deaed8",
+                      "bedsCurrent":5,
+                      "projectId":"b7557445-6d2c-43c5-a002-665b95deaed8",
+                      "userId":"shubas",
+                      "bedsCapacity":8,
+                      "familyUnit":false,
+                      "inService":false,
+                      "vacant":false,
+                      "aliasName":"Test Name"
+                   }
+                  ]

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "inactive": {
+        "type": "boolean"
+      },
+      "housingInventoryId": {
+        "type": "string"
+      },
+      "bedsCurrent": {
+        "type": "integer"
+      },
+      "projectId": {
+        "type": "string"
+      },
+      "userId": {
+        "type": "string"
+      },
+      "bedsCapacity": {
+        "type": "integer"
+      },
+      "familyUnit": {
+        "type": "boolean"
+      },
+      "inService": {
+        "type": "boolean"
+      },
+      "vacant": {
+        "type": "boolean"
+      },
+      
+      "aliasName":{
+        "type":"string"
+      }
+    },
+    "required": [
+      "inactive",
+      "housingInventoryId",
+      "bedsCurrent",
+      "projectId",
+      "userId",
+      "bedsCapacity",
+      "familyUnit",
+      "inService",
+      "vacant",
+      "aliasName"
+    ]
+  }
+}
