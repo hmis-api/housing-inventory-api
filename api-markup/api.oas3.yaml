@@ -1,0 +1,781 @@
+openapi: 3.0.0
+info:
+  title: Housing Inventory
+  version: 2.0.0
+servers:
+  - url: https://www.hmislynk.com/housinginventory/rest/v2
+security: 
+  - oauth2: 
+    - user
+    - administrator
+paths:
+  /housing-units:
+    get:
+      description: gets housing units
+      operationId: GET_housing-units
+      parameters:
+        - name: userId
+          in: query
+          description: Filter the list of housing units by userId.
+          schema:
+            type: string
+        - name: projectId
+          in: query
+          description: Filter the list of housing units by projectId.
+          schema:
+            type: string
+        - name: vacant
+          in: query
+          description: Filter the list of housing units by vacant status.
+          schema:
+            type: boolean
+        - name: inactive
+          in: query
+          description: Filter the list of housing units by inactive status.
+          schema:
+            type: boolean
+        - name: size
+          in: query
+          description: Number of records in response.
+          schema:
+            default: 30
+            type: integer
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            default: 0
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  links:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rel:
+                          type: string
+                        href:
+                          type: string
+                      required:
+                        - rel
+                        - href
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        inactive:
+                          type: boolean
+                        housingInventoryId:
+                          type: string
+                        bedsCurrent:
+                          type: integer
+                        projectId:
+                          type: string
+                        userId:
+                          type: string
+                        bedsCapacity:
+                          type: integer
+                        familyUnit:
+                          type: boolean
+                        inService:
+                          type: boolean
+                        vacant:
+                          type: boolean
+                        aliasName:
+                          type: string
+                        project:
+                          required:
+                            - projectName
+                            - id
+                            - schemaYear
+                          type: object
+                          properties:
+                            projectName:
+                              type: string
+                            projectcommonName:
+                              type: string
+                            id:
+                              type: string
+                            schemaYear:
+                              type: string
+                        links:
+                          type: array
+                          items:
+                            required:
+                              - rel
+                              - href
+                            type: object
+                            properties:
+                              rel:
+                                type: string
+                              href:
+                                type: string
+                      required:
+                        - inactive
+                        - housingInventoryId
+                        - bedsCurrent
+                        - projectId
+                        - userId
+                        - bedsCapacity
+                        - familyUnit
+                        - inService
+                        - vacant
+                        - links
+                  page:
+                    required:
+                      - size
+                      - totalElements
+                      - totalPages
+                      - number
+                    type: object
+                    properties:
+                      size:
+                        type: integer
+                      totalElements:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      number:
+                        type: integer
+                example:
+                  links:
+                    - rel: first
+                      href: >-
+                        https://www.hmislynk.com/inventory-api/rest/housing-units/?page=0&size=2
+                    - rel: self
+                      href: >-
+                        https://www.hmislynk.com/inventory-api/rest/housing-units/?page=0&size=2
+                    - rel: next
+                      href: >-
+                        https://www.hmislynk.com/inventory-api/rest/housing-units/?page=1&size=2
+                    - rel: last
+                      href: https://www.hmislynk.com/inventory-api/rest/housing-units/?page=20&size=2
+                  content:
+                    -
+                      inactive: false
+                      housingInventoryId: 7a428e4e-d682-43ef-b2c7-383340ceb84e
+                      bedsCurrent: 5
+                      projectId: 3189abda-32bd-4330-8839-8c6f723f1e73
+                      userId: shubas
+                      bedsCapacity: 6
+                      familyUnit: false
+                      inService: false
+                      vacant: false
+                      aliasName: Test Name
+                      project:
+                        id: 3189abda-32bd-4330-8839-8c6f723f1e73
+                        projectCommonName: READ_TEST_PROJECT
+                        projectName: READ_TEST_PROJECT
+                        schemaYear: 2014
+                      links:
+                        - rel: project
+                          href: /hmis-clientapi/rest/v2014/projects/3189abda-32bd-4330-8839-8c6f723f1e73
+                    - 
+                      inactive: false
+                      housingInventoryId: 0144dd7c-a2df-4dec-8f57-a7afe45336c4
+                      bedsCurrent: 8
+                      projectId: 3189abda-32bd-4330-8839-8c6f723f1e73
+                      userId: shubas
+                      bedsCapacity: 6
+                      familyUnit: false
+                      inService: false
+                      vacant: false
+                      project:
+                        id: 3189abda-32bd-4330-8839-8c6f723f1e73
+                        projectCommonName: READ_TEST_PROJECT
+                        projectName: READ_TEST_PROJECT
+                        schemaYear: 2014
+                      links:
+                        - rel: project
+                          href: /hmis-clientapi/rest/v2014/projects/3189abda-32bd-4330-8839-8c6f723f1e73
+                  page:
+                    size: 2
+                    totalElements: 42
+                    totalPages: 21
+                    number: 0
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errorMessage: no housing inventory related to project id.
+  /housing-units/{housing_unit_uuid}:
+    get:
+      description: retrieves inventory details
+      operationId: GET_housing-units-housing_unit_uuid
+      parameters:
+      - name: housing_unit_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  required:
+                    - inactive
+                    - housingInventoryId
+                    - bedsCurrent
+                    - projectId
+                    - userId
+                    - bedsCapacity
+                    - familyUnit
+                    - inService
+                    - vacant
+                    - aliasName
+                  type: object
+                  properties:
+                    inactive:
+                      type: boolean
+                    housingInventoryId:
+                      type: string
+                    bedsCurrent:
+                      type: integer
+                    projectId:
+                      type: string
+                    userId:
+                      type: string
+                    bedsCapacity:
+                      type: integer
+                    familyUnit:
+                      type: boolean
+                    inService:
+                      type: boolean
+                    vacant:
+                      type: boolean
+                    aliasName:
+                      type: string
+                    project:
+                      type: object
+                      properties:
+                        projectName:
+                          type: string
+                        projectcommonName:
+                          type: string
+                        id:
+                          type: string
+                        schemaYear:
+                          type: string
+                      required:
+                        - projectName
+                        - projectcommonName
+                        - id
+                        - schemaYear
+              example:
+                  - dateCreated: 09-28-2016 09:43:38.317
+                    dateUpdated: 09-28-2016 09:43:38.317
+                    projectGroupCode: PG0001
+                    inactive: false
+                    housingInventoryId: 620ef25c-c9db-41fd-b799-fc3691f0d3b4
+                    bedsCurrent: 2
+                    projectId: 3189abda-32bd-4330-8839-8c6f723f1e73
+                    userId: 620ef25c-c9db-41fd-b799-fc3691f0d3b4
+                    bedsCapacity: 5
+                    familyUnit: false
+                    inService: false
+                    vacant: false
+                    aliasName: test name
+                    schemaYear: 2014
+                    project:
+                      id: 3189abda-32bd-4330-8839-8c6f723f1e73
+                      projectcommonname: READ_TEST_PROJECT
+                      projectname: READ_TEST_PROJECT
+                      schemaYear: '2014'
+                    links:
+                      - rel: project
+                        href: /hmis-clientapi/rest/v2014/projects/3189abda-32bd-4330-8839-8c6f723f1e73
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errorMessage: Housing unit not found.
+  
+  /projects/{projectid}/eligibilityrequirements:
+    parameters: 
+      - $ref: "#/components/parameters/projectid"
+    post:
+      description: |
+        To create an eligibility requirement. The following operators can be used for 'value' field. 
+        1) Relational operators : equal (==, =), not equal (!=), less than (<), less than or equal (<= ), greater than (>), and greater than or equal (>=). 
+        2) Logical operators : and (&&,&), or(||).
+      operationId: POST_projects-projectid-eligibilityrequirements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                servesSingles: 
+                  type: boolean
+                servesHouseholdWithChildren:
+                  type: boolean
+                incomeRequirement:
+                  type: boolean
+                alcoholAbuse:
+                  type: boolean
+                bothAlcoholAndDrugAbuse:
+                  type: boolean
+                chronicHealthCondition:
+                  type: boolean
+                developmental:
+                  type: boolean
+                drugAbuse:
+                  type: boolean
+                mentalHealthProblem:
+                  type: boolean
+                type:
+                  type: string
+                gender:
+                  type: integer
+                minAge: 
+                  type: integer
+                maxAge:
+                  type: integer
+                minimumIncome:
+                  type: integer
+                maximumIncome: 
+                  type: integer
+                zipCode: 
+                  type: string
+                disability:
+                  type: string
+                chronicallyHomeless:
+                  type: string
+                race:
+                  type: string
+                ethnicity:
+                  type: string
+                veteranStatus:
+                  type: string
+                housingStatus:
+                  type: string
+                monthsHomelessPastThreeYears:
+                  type: string
+                residencePrior:
+                  type: string
+              example:
+                requirements:
+                  - name: servesSingles
+                    value: ' != true'
+                  - name: servesHouseholdWithChildren
+                    value: ' == false'
+                  - name: incomeRequirement
+                    value: ' > 9 & <20'
+                  - name: gender
+                    value: '== 1 || == 3 '
+                  - name: income
+                    value: ' >10 || < 50'
+                  - name: zipCode
+                    value: = 50050 && = 50532
+                  - name: type
+                    value: ' == "sick"'
+                  - name: monthsHomelessPastThreeYears
+                    value: ' ( == 3 || ==4) && ( > 5 )'
+                  - name: residencePrior
+                    value: ==1
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:  
+                type: object
+                properties: 
+                  requirements: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - name
+                        - value
+                required:
+                  - requirements
+                example:
+                  eligibilityRequirementId: f580935c-01e0-4d51-9b8d-7590bf204058
+                  requirements:
+                    - name: servesSingles
+                      value: ' != true'
+                    - name: servesHouseholdWithChildren
+                      value: ' == false'
+                    - name: incomeRequirement
+                      value: ' > 9 & <20'
+                    - name: gender
+                      value: '== 1 || == 3 '
+                    - name: income
+                      value: ' >10 || < 50'
+                    - name: zipCode
+                      value: = 50050 && = 50532
+                    - name: monthsHomelessPastThreeYears
+                      value: ' ( == 3 || ==4) && ( > 5 )'
+                    - name: type
+                      value: ' == "sick"'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                      required: 
+                        - message
+                    required:
+                     - error
+                example:
+                  error:
+                    - message: Minimum Income must be greater than or equal to 0
+                    - message: Maximum Age must be greater than 0
+    get:
+      description: |
+        To retrieve eligibility requirements of a project.
+      operationId: GET_projects-projectid-eligibilityrequirements
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  links:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rel:
+                          type: string
+                        href:
+                          type: string
+                      required:
+                      - rel
+                      - href
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        gender:
+                          type: string
+                        servesSingles:
+                          type: boolean
+                        servesHouseholdWithChildren:
+                          type: boolean
+                        minAge:
+                          type: integer
+                        maxAge:
+                          type: integer
+                        incomeRequirement:
+                          type: boolean
+                        minimumIncome:
+                          type: integer
+                        maximumIncome:
+                          type: integer
+                        zipCode:
+                          type: string
+                        disability:
+                          type: string
+                        alcoholAbuse:
+                          type: boolean
+                        bothAlcoholAndDrugAbuse:
+                          type: boolean
+                        chronicHealthCondition:
+                          type: boolean
+                        developmental:
+                          type: boolean
+                        drugAbuse:
+                          type: boolean
+                        mentalHealthProblem:
+                          type: boolean
+                        chronicallyHomeless:
+                          type: string
+                        race:
+                          type: string
+                        ethnicity:
+                          type: string
+                        veteranStatus:
+                          type: string
+                        housingStatus:
+                          type: string
+                        monthsHomelessPastThreeYears:
+                          type: string
+                        residencePrior:
+                          type: string
+                        links:
+                          type: array
+                          items: {}
+                      required:
+                      - links
+                  page:
+                    type: object
+                    properties:
+                      size:
+                        type: integer
+                      totalElements:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      number:
+                        type: integer
+                    required:
+                    - size
+                    - totalElements
+                    - totalPages
+                    - number
+                required:
+                - links
+                - content
+                - page
+                example:
+                  links:
+                    - rel: self
+                      href: >-
+                        http://localhost:8080/inventory-api/projects/893ecb78-84be-11e6-ae22-56b6b6499611/eligibilityrequirements
+                  content:
+                    - eligibilityRequirementId: 0effc53e-cd9a-48b1-af22-e90b7d860e77
+                      projectId: 893ecb78-84be-11e6-ae22-56b6b6499611
+                      requirements:
+                        - name: servesSingles
+                          value: ' != true'
+                        - name: servesHouseholdWithChildren
+                          value: ' == false'
+                        - name: incomeRequirement
+                          value: ' > 9 & <20'
+                        - name: gender
+                          value: '== 1 or == 3 '
+                        - name: income
+                          value: ' >10 || < 50'
+                        - name: zipCode
+                          value: = 50050 and = 50532
+                        - name: monthsHomelessPastThreeYears
+                          value: ' ( == 3 || ==4) && ( > 5 )'
+                        - name: type
+                          value: ' == "sick"'
+                      links: []
+                  page:
+                    size: 20
+                    totalElements: 1
+                    totalPages: 1
+                    number: 0
+      parameters:
+        - name: size
+          in: query
+          description: Number of records in response.
+          schema:
+            default: 30
+            type: integer
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            default: 0
+            type: integer
+  /projects/{projectid}/eligibilityrequirements/{requirementid}:
+    parameters:
+      - $ref: "#/components/parameters/projectid"
+      - $ref: "#/components/parameters/requirementid"
+    put:
+      description: To update existing eligibility requirement
+      operationId: PUT_projects-projectid-eligibilityrequirements-requirementid
+      responses:
+        '200':
+          description: Success
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requirements:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - name
+                        - value
+              required: 
+                - requirements
+              example:
+                requirements:
+                  - name: servesSingles
+                    value: ' != true'
+                  - name: servesHouseholdWithChildren
+                    value: ' == false'
+                  - name: incomeRequirement
+                    value: ' > 9 & < 20'
+                  - name: gender
+                    value: ' == 1 or == 3 '
+                  - name: income
+                    value: ' > 10 || < 50'
+                  - name: zipCode
+                    value: ' == 50050 and == 50532'
+                  - name: monthsHomelessPastThreeYears
+                    value: ' ( == 3 || == 4) && ( > 5 )'
+                  - name: type
+                    value: ' == "sick"'
+    delete:
+      responses:
+        '200':
+          description: Success
+      description: |
+        To delete an eligibility requirement.
+      operationId: DELETE_projects-projectid-eligibilityrequirements-requirementid
+    get:
+      description: 'To get selected eligibility requirement.'
+      operationId: GET_projects-projectid-eligibilityrequirements-requirementid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eligibilityRequirementId:
+                    type: string
+                  gender:
+                    type: string
+                  servesSingles:
+                    type: boolean
+                  servesHouseholdWithChildren:
+                    type: boolean
+                  minAge:
+                    type: integer
+                  maxAge:
+                    type: integer
+                  incomeRequirement:
+                    type: boolean
+                  minimumIncome:
+                    type: integer
+                  maximumIncome:
+                    type: integer
+                  zipCode:
+                    type: string
+                  disability:
+                    type: string
+                  alcoholAbuse:
+                    type: boolean
+                  bothAlcoholAndDrugAbuse:
+                    type: boolean
+                  chronicHealthCondition:
+                    type: boolean
+                  developmental:
+                    type: boolean
+                  drugAbuse:
+                    type: boolean
+                  mentalHealthProblem:
+                    type: boolean
+                  chronicallyHomeless:
+                    type: string
+                  race:
+                    type: string
+                  ethnicity:
+                    type: string
+                  veteranStatus:
+                    type: string
+                  housingStatus:
+                    type: string
+                  monthsHomelessPastThreeYears:
+                    type: string
+                  residencePrior:
+                    type: string
+                required:
+                  - eligibilityRequirementId
+                example:
+                  eligibilityRequirementId: 0effc53e-cd9a-48b1-af22-e90b7d860e77
+                  projectId: 893ecb78-84be-11e6-ae22-56b6b6499611
+                  requirements:
+                    - name: servesSingles
+                      value: ' != true'
+                    - name: servesHouseholdWithChildren
+                      value: ' == false'
+                    - name: incomeRequirement
+                      value: ' > 9 & <20'
+                    - name: gender
+                      value: '== 1 or == 3 '
+                    - name: income
+                      value: ' >10 || < 50'
+                    - name: zipCode
+                      value: = '50050 and = 50532'
+                    - name: monthsHomelessPastThreeYears
+                      value: ' ( == 3 || ==4) && ( > 5 )'
+                    - name: type
+                      value: " == 'sick'"
+components:
+  securitySchemes:
+    oauth2:
+      description: The HMIS API supports OAuth 2.0 for authenticating all API requests.
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: https://hmislynk.com/hmis-authorization-service/rest/token
+          refreshUrl: https://hmislynk.com/hmis-authorization-service/rest/authorize
+          scopes:
+            user: a normal user role
+            administrator: an administrator role
+  parameters:
+    projectid:
+      name: projectid
+      in: path
+      description: ID of project to use
+      required: true
+      schema: 
+        type: string
+    requirementid:
+      name: requirementid
+      in: path
+      description: ID of project to use
+      required: true
+      schema: 
+        type: string
