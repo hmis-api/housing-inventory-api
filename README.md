@@ -1,2 +1,2 @@
 # housing-inventory-api
-For Coordinated Entry Systems
+API for adjusting housing inventories for HUD Continuum of Care Coordinated [Housing] Entry Systems
