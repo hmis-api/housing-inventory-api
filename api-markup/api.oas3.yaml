@@ -3,13 +3,65 @@ info:
   title: Housing Inventory
   version: 2.0.0
 servers:
-  - url: https://www.hmislynk.com/housinginventory/rest/v2
+  - url: https://www.hslynk.com/housinginventory/rest/v2
 security: 
   - oauth2: 
     - user
     - administrator
 paths:
-  /housing-units:
+  '/housing-units':
+    post:
+      description: Create Housing unit
+      requestBody: 
+        content:
+          application/json:
+            schema:
+             example:
+                - bedsCurrent: 5
+                  projectId: 9d278142-978d-461e-8aea-07d629e462e8
+                  bedsCapacity: 10
+                  familyUnit: false
+                  inService: false
+                  vacant: true
+                - bedsCurrent: 5
+                  projectId: f9748a7b-80ac-4ffd-86f7-c8e71416502f
+                  bedsCapacity: 10
+                  familyUnit: false
+                  inService: false
+                  vacant: true    
+      responses:
+       '200':
+         description: ''
+         content:
+          application/json:
+           schema:
+            example:
+              - dateCreated: 08-16-2018 12:38:08.144
+                dateUpdated: 08-16-2018 12:38:08.144
+                projectGroupCode: PG0001
+                userId: 8b6c6ef2-87c7-47f0-8874-4cca6f09365c
+                deleted: false
+                housingInventoryId: b6764736-ae78-4575-adbd-a6dc29ed9ceb
+                bedsCurrent: 5
+                projectId: 9d278142-978d-461e-8aea-07d629e462e8
+                bedsCapacity: 10
+                familyUnit: false
+                inService: false
+                vacant: true
+                schemaYear: 2014
+              - dateCreated: 08-16-2018 12:38:08.162
+                dateUpdated: 08-16-2018 12:38:08.162
+                projectGroupCode: PG0001
+                userId: 8b6c6ef2-87c7-47f0-8874-4cca6f09365c
+                deleted: false
+                housingInventoryId: e96cd37c-c1e2-4752-b3fc-6b3c7bc48bc6
+                bedsCurrent: 5
+                projectId: f9748a7b-80ac-4ffd-86f7-c8e71416502f
+                bedsCapacity: 10
+                familyUnit: false
+                inService: false
+                vacant: true
+                schemaYear: 2015
     get:
       description: gets housing units
       operationId: GET_housing-units
