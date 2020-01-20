@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Housing Inventory
-  version: 2.0.1
+  version: 2.0.2
   description: |
        **Note :**
               Please note that the partial updates are supported via PUT APIs. However, Note that If "null" value is passed for any element, in the PUT request body, it will be ignored. An empty string value should be sent (instead of "null" value) for the elements that need to be updated with NULL values.
@@ -12,7 +12,7 @@ security:
     - user
     - administrator
 paths:
-  '/housing-units':
+  '/housingunits':
     post:
       description: Create Housing unit
       requestBody: 
@@ -68,6 +68,374 @@ paths:
     get:
       description: gets housing units
       operationId: GET_housing-units
+      parameters:
+        - name: userId
+          in: query
+          description: Filter the list of housing units by userId.
+          schema:
+            type: string
+        - name: projectId
+          in: query
+          description: Filter the list of housing units by projectId.
+          schema:
+            type: string
+        - name: vacant
+          in: query
+          description: Filter the list of housing units by vacant status.
+          schema:
+            type: boolean
+        - name: inactive
+          in: query
+          description: Filter the list of housing units by inactive status.
+          schema:
+            type: boolean
+        - name: size
+          in: query
+          description: Number of records in response.
+          schema:
+            default: 30
+            type: integer
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            default: 0
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  links:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rel:
+                          type: string
+                        href:
+                          type: string
+                      required:
+                        - rel
+                        - href
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        inactive:
+                          type: boolean
+                        housingInventoryId:
+                          type: string
+                        bedsCurrent:
+                          type: integer
+                        projectId:
+                          type: string
+                        userId:
+                          type: string
+                        bedsCapacity:
+                          type: integer
+                        familyUnit:
+                          type: boolean
+                        inService:
+                          type: boolean
+                        vacant:
+                          type: boolean
+                        aliasName:
+                          type: string
+                        project:
+                          required:
+                            - projectName
+                            - id
+                            - schemaYear
+                          type: object
+                          properties:
+                            projectName:
+                              type: string
+                            projectcommonName:
+                              type: string
+                            id:
+                              type: string
+                            schemaYear:
+                              type: string
+                        links:
+                          type: array
+                          items:
+                            required:
+                              - rel
+                              - href
+                            type: object
+                            properties:
+                              rel:
+                                type: string
+                              href:
+                                type: string
+                      required:
+                        - inactive
+                        - housingInventoryId
+                        - bedsCurrent
+                        - projectId
+                        - userId
+                        - bedsCapacity
+                        - familyUnit
+                        - inService
+                        - vacant
+                        - links
+                  page:
+                    required:
+                      - size
+                      - totalElements
+                      - totalPages
+                      - number
+                    type: object
+                    properties:
+                      size:
+                        type: integer
+                      totalElements:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      number:
+                        type: integer
+                example:
+                  links:
+                    - rel: first
+                      href: >-
+                        https://www.hmislynk.com/inventory-api/rest/housingunits/?page=0&size=2
+                    - rel: self
+                      href: >-
+                        https://www.hmislynk.com/inventory-api/rest/housingunits/?page=0&size=2
+                    - rel: next
+                      href: >-
+                        https://www.hmislynk.com/inventory-api/rest/housingunits/?page=1&size=2
+                    - rel: last
+                      href: https://www.hmislynk.com/inventory-api/rest/housingunits/?page=20&size=2
+                  content:
+                    -
+                      inactive: false
+                      housingInventoryId: 7a428e4e-d682-43ef-b2c7-383340ceb84e
+                      bedsCurrent: 5
+                      projectId: 3189abda-32bd-4330-8839-8c6f723f1e73
+                      userId: shubas
+                      bedsCapacity: 6
+                      familyUnit: false
+                      inService: false
+                      vacant: false
+                      aliasName: Test Name
+                      project:
+                        id: 3189abda-32bd-4330-8839-8c6f723f1e73
+                        projectCommonName: READ_TEST_PROJECT
+                        projectName: READ_TEST_PROJECT
+                        schemaYear: 2014
+                      links:
+                        - rel: project
+                          href: /hmis-clientapi/rest/v2014/projects/3189abda-32bd-4330-8839-8c6f723f1e73
+                    - 
+                      inactive: false
+                      housingInventoryId: 0144dd7c-a2df-4dec-8f57-a7afe45336c4
+                      bedsCurrent: 8
+                      projectId: 3189abda-32bd-4330-8839-8c6f723f1e73
+                      userId: shubas
+                      bedsCapacity: 6
+                      familyUnit: false
+                      inService: false
+                      vacant: false
+                      project:
+                        id: 3189abda-32bd-4330-8839-8c6f723f1e73
+                        projectCommonName: READ_TEST_PROJECT
+                        projectName: READ_TEST_PROJECT
+                        schemaYear: 2014
+                      links:
+                        - rel: project
+                          href: /hmis-clientapi/rest/v2014/projects/3189abda-32bd-4330-8839-8c6f723f1e73
+                  page:
+                    size: 2
+                    totalElements: 42
+                    totalPages: 21
+                    number: 0
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errorMessage: no housing inventory related to project id.
+  /housingunits/{housingunitid}:
+    get:
+      description: retrieves inventory details
+      operationId: GET_housing-units-housing_unit_uuid
+      parameters:
+      - name: housingunitid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  required:
+                    - inactive
+                    - housingInventoryId
+                    - bedsCurrent
+                    - projectId
+                    - userId
+                    - bedsCapacity
+                    - familyUnit
+                    - inService
+                    - vacant
+                    - aliasName
+                  type: object
+                  properties:
+                    inactive:
+                      type: boolean
+                    housingInventoryId:
+                      type: string
+                    bedsCurrent:
+                      type: integer
+                    projectId:
+                      type: string
+                    userId:
+                      type: string
+                    bedsCapacity:
+                      type: integer
+                    familyUnit:
+                      type: boolean
+                    inService:
+                      type: boolean
+                    vacant:
+                      type: boolean
+                    aliasName:
+                      type: string
+                    project:
+                      type: object
+                      properties:
+                        projectName:
+                          type: string
+                        projectcommonName:
+                          type: string
+                        id:
+                          type: string
+                        schemaYear:
+                          type: string
+                      required:
+                        - projectName
+                        - projectcommonName
+                        - id
+                        - schemaYear
+              example:
+                  - dateCreated: 09-28-2016 09:43:38.317
+                    dateUpdated: 09-28-2016 09:43:38.317
+                    projectGroupCode: PG0001
+                    inactive: false
+                    housingInventoryId: 620ef25c-c9db-41fd-b799-fc3691f0d3b4
+                    bedsCurrent: 2
+                    projectId: 3189abda-32bd-4330-8839-8c6f723f1e73
+                    userId: 620ef25c-c9db-41fd-b799-fc3691f0d3b4
+                    bedsCapacity: 5
+                    familyUnit: false
+                    inService: false
+                    vacant: false
+                    aliasName: test name
+                    schemaYear: 2014
+                    project:
+                      id: 3189abda-32bd-4330-8839-8c6f723f1e73
+                      projectcommonname: READ_TEST_PROJECT
+                      projectname: READ_TEST_PROJECT
+                      schemaYear: '2014'
+                    links:
+                      - rel: project
+                        href: /hmis-clientapi/rest/v2014/projects/3189abda-32bd-4330-8839-8c6f723f1e73
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errorMessage: Housing unit not found.
+  '/housing-units':
+    post:
+      deprecated: true    
+      description: Create Housing unit
+      requestBody: 
+        content:
+          application/json:
+            schema:
+             example:
+                - bedsCurrent: 5
+                  projectId: 9d278142-978d-461e-8aea-07d629e462e8
+                  bedsCapacity: 10
+                  familyUnit: false
+                  inService: false
+                  vacant: true
+                - bedsCurrent: 5
+                  projectId: f9748a7b-80ac-4ffd-86f7-c8e71416502f
+                  bedsCapacity: 10
+                  familyUnit: false
+                  inService: false
+                  vacant: true    
+      responses:
+       '200':
+         description: ''
+         content:
+          application/json:
+           schema:
+            example:
+              - dateCreated: 08-16-2018 12:38:08.144
+                dateUpdated: 08-16-2018 12:38:08.144
+                projectGroupCode: PG0001
+                userId: 8b6c6ef2-87c7-47f0-8874-4cca6f09365c
+                deleted: false
+                housingInventoryId: b6764736-ae78-4575-adbd-a6dc29ed9ceb
+                bedsCurrent: 5
+                projectId: 9d278142-978d-461e-8aea-07d629e462e8
+                bedsCapacity: 10
+                familyUnit: false
+                inService: false
+                vacant: true
+                schemaYear: 2014
+              - dateCreated: 08-16-2018 12:38:08.162
+                dateUpdated: 08-16-2018 12:38:08.162
+                projectGroupCode: PG0001
+                userId: 8b6c6ef2-87c7-47f0-8874-4cca6f09365c
+                deleted: false
+                housingInventoryId: e96cd37c-c1e2-4752-b3fc-6b3c7bc48bc6
+                bedsCurrent: 5
+                projectId: f9748a7b-80ac-4ffd-86f7-c8e71416502f
+                bedsCapacity: 10
+                familyUnit: false
+                inService: false
+                vacant: true
+                schemaYear: 2015
+    get:
+      deprecated: true    
+      description: gets housing units
+      operationId: GET_dep_housing-units
       parameters:
         - name: userId
           in: query
@@ -274,6 +642,7 @@ paths:
                   errorMessage: no housing inventory related to project id.
   /housing-units/{housingunitid}:
     get:
+      deprecated: true    
       description: retrieves inventory details
       operationId: GET_housing-units-housing_unit_uuid
       parameters:
@@ -377,7 +746,8 @@ paths:
               schema:
                 type: object
                 example:
-                  errorMessage: Housing unit not found.
+                  errorMessage: Housing unit not found.                  
+                  
   
   /projects/{projectid}/eligibilityrequirements:
     parameters: 
