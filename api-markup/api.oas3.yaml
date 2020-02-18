@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Housing Inventory
-  version: 2.0.3
+  version: 2.1.0
   description: |
        **Note :**
               Please note that the partial updates are supported via PUT APIs. However, Note that If "null" value is passed for any element, in the PUT request body, it will be ignored. An empty string value should be sent (instead of "null" value) for the elements that need to be updated with NULL values.
@@ -18,8 +18,43 @@ paths:
       requestBody:
         content:
           application/json:
-            schema:
-             example:
+              schema:
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "bedsCurrent",
+                      "projectId",
+                      "bedsCapacity",
+                      "familyUnit",
+                      "inService",
+                      "vacant"
+                    ],
+                    "properties": {
+                      "bedsCurrent": {
+                        "type": "integer"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "bedsCapacity": {
+                        "type": "integer"
+                      },
+                      "familyUnit": {
+                        "type": "boolean"
+                      },
+                      "inService": {
+                        "type": "boolean"
+                      },
+                      "vacant": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              example:
                 - bedsCurrent: 5
                   projectId: 9d278142-978d-461e-8aea-07d629e462e8
                   bedsCapacity: 10
@@ -37,7 +72,74 @@ paths:
          description: ''
          content:
           application/json:
-           schema:
+            schema:
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "dateCreated",
+                    "dateUpdated",
+                    "projectGroupCode",
+                    "userId",
+                    "deleted",
+                    "housingInventoryId",
+                    "bedsCurrent",
+                    "projectId",
+                    "bedsCapacity",
+                    "familyUnit",
+                    "inService",
+                    "vacant",
+                    "schemaYear"
+                  ],
+                  "properties": {
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                    },
+                    "projectGroupCode": {
+                      "type": "string",
+                    },
+                    "userId": {
+                      "type": "string",
+                      "format": "uuid",
+                    },
+                    "deleted": {
+                      "type": "boolean"
+                    },
+                    "housingInventoryId": {
+                      "type": "string",
+                      "format": "uuid",
+                    },
+                    "bedsCurrent": {
+                      "type": "integer"
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "format": "uuid",
+                    },
+                    "bedsCapacity": {
+                      "type": "integer"
+                    },
+                    "familyUnit": {
+                      "type": "boolean"
+                    },
+                    "inService": {
+                      "type": "boolean"
+                    },
+                    "vacant": {
+                      "type": "boolean"
+                    },
+                    "schemaYear": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
             example:
               - dateCreated: 08-16-2018 12:38:08.144
                 dateUpdated: 08-16-2018 12:38:08.144
@@ -67,7 +169,7 @@ paths:
                 schemaYear: 2015
     get:
       description: gets housing units
-      operationId: GET_housing-units
+      operationId: GET_housingunits
       parameters:
         - name: userId
           in: query
@@ -107,100 +209,154 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  links:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        rel:
-                          type: string
-                        href:
-                          type: string
-                      required:
-                        - rel
-                        - href
-                  content:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        inactive:
-                          type: boolean
-                        housingInventoryId:
-                          type: string
-                        bedsCurrent:
-                          type: integer
-                        projectId:
-                          type: string
-                        userId:
-                          type: string
-                        bedsCapacity:
-                          type: integer
-                        familyUnit:
-                          type: boolean
-                        inService:
-                          type: boolean
-                        vacant:
-                          type: boolean
-                        aliasName:
-                          type: string
-                        project:
-                          required:
-                            - projectName
-                            - id
-                            - schemaYear
-                          type: object
-                          properties:
-                            projectName:
-                              type: string
-                            projectcommonName:
-                              type: string
-                            id:
-                              type: string
-                            schemaYear:
-                              type: string
-                        links:
-                          type: array
-                          items:
-                            required:
-                              - rel
-                              - href
-                            type: object
-                            properties:
-                              rel:
-                                type: string
-                              href:
-                                type: string
-                      required:
-                        - inactive
-                        - housingInventoryId
-                        - bedsCurrent
-                        - projectId
-                        - userId
-                        - bedsCapacity
-                        - familyUnit
-                        - inService
-                        - vacant
-                        - links
-                  page:
-                    required:
-                      - size
-                      - totalElements
-                      - totalPages
-                      - number
-                    type: object
-                    properties:
-                      size:
-                        type: integer
-                      totalElements:
-                        type: integer
-                      totalPages:
-                        type: integer
-                      number:
-                        type: integer
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "content",
+                    "page"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "rel",
+                          "href"
+                        ],
+                        "properties": {
+                          "rel": {
+                            "type": "string",
+                          },
+                          "href": {
+                            "type": "string",
+                          }
+                        }
+                      }
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "inactive",
+                          "housingInventoryId",
+                          "bedsCurrent",
+                          "projectId",
+                          "userId",
+                          "bedsCapacity",
+                          "familyUnit",
+                          "inService",
+                          "vacant",
+                          "aliasName",
+                          "project",
+                          "links"
+                        ],
+                        "properties": {
+                          "inactive": {
+                            "type": "boolean"
+                          },
+                          "housingInventoryId": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "bedsCurrent": {
+                            "type": "integer"
+                          },
+                          "projectId": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "userId": {
+                            "type": "string",
+                          },
+                          "bedsCapacity": {
+                            "type": "integer"
+                          },
+                          "familyUnit": {
+                            "type": "boolean"
+                          },
+                          "inService": {
+                            "type": "boolean"
+                          },
+                          "vacant": {
+                            "type": "boolean"
+                          },
+                          "aliasName": {
+                            "type": "string",
+                          },
+                          "project": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "projectCommonName",
+                              "projectName",
+                              "schemaYear"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid",
+                              },
+                              "projectCommonName": {
+                                "type": "string",
+                              },
+                              "projectName": {
+                                "type": "string",
+                              },
+                              "schemaYear": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "links": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "rel",
+                                "href"
+                              ],
+                              "properties": {
+                                "rel": {
+                                  "type": "string",
+                                },
+                                "href": {
+                                  "type": "string",
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "object",
+                      "required": [
+                        "size",
+                        "totalElements",
+                        "totalPages",
+                        "number"
+                      ],
+                      "properties": {
+                        "size": {
+                          "type": "integer"
+                        },
+                        "totalElements": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "number": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              example:
                   links:
                     - rel: first
                       href: >-
@@ -261,21 +417,41 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   message: Unauthorized
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "errorMessage"
+                  ],
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   errorMessage: no housing inventory related to project id.
   /housingunits/{housingunitid}:
     get:
       description: retrieves inventory details
-      operationId: GET_housing-units-housing_unit_uuid
+      operationId: GET_housingunits-housingunit_uuid
       parameters:
       - name: housingunitid
         in: path
@@ -288,57 +464,121 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  required:
-                    - inactive
-                    - housingInventoryId
-                    - bedsCurrent
-                    - projectId
-                    - userId
-                    - bedsCapacity
-                    - familyUnit
-                    - inService
-                    - vacant
-                    - aliasName
-                  type: object
-                  properties:
-                    inactive:
-                      type: boolean
-                    housingInventoryId:
-                      type: string
-                    bedsCurrent:
-                      type: integer
-                    projectId:
-                      type: string
-                    userId:
-                      type: string
-                    bedsCapacity:
-                      type: integer
-                    familyUnit:
-                      type: boolean
-                    inService:
-                      type: boolean
-                    vacant:
-                      type: boolean
-                    aliasName:
-                      type: string
-                    project:
-                      type: object
-                      properties:
-                        projectName:
-                          type: string
-                        projectcommonName:
-                          type: string
-                        id:
-                          type: string
-                        schemaYear:
-                          type: string
-                      required:
-                        - projectName
-                        - projectcommonName
-                        - id
-                        - schemaYear
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "dateUpdated",
+                      "projectGroupCode",
+                      "inactive",
+                      "housingInventoryId",
+                      "bedsCurrent",
+                      "projectId",
+                      "userId",
+                      "bedsCapacity",
+                      "familyUnit",
+                      "inService",
+                      "vacant",
+                      "aliasName",
+                      "schemaYear",
+                      "project",
+                      "links"
+                    ],
+                    "properties": {
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                      },
+                      "dateUpdated": {
+                        "type": "string",
+                        "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                      },
+                      "projectGroupCode": {
+                        "type": "string",
+                      },
+                      "inactive": {
+                        "type": "boolean"
+                      },
+                      "housingInventoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "bedsCurrent": {
+                        "type": "integer"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "userId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "bedsCapacity": {
+                        "type": "integer"
+                      },
+                      "familyUnit": {
+                        "type": "boolean"
+                      },
+                      "inService": {
+                        "type": "boolean"
+                      },
+                      "vacant": {
+                        "type": "boolean"
+                      },
+                      "aliasName": {
+                        "type": "string",
+                      },
+                      "schemaYear": {
+                        "type": "integer"
+                      },
+                      "project": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "projectcommonname",
+                          "projectname",
+                          "schemaYear"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "projectcommonname": {
+                            "type": "string",
+                          },
+                          "projectname": {
+                            "type": "string",
+                          },
+                          "schemaYear": {
+                            "type": "string",
+                          }
+                        }
+                      },
+                      "links": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "rel",
+                            "href"
+                          ],
+                          "properties": {
+                            "rel": {
+                              "type": "string",
+                            },
+                            "href": {
+                              "type": "string",
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               example:
                   - dateCreated: 09-28-2016 09:43:38.317
                     dateUpdated: 09-28-2016 09:43:38.317
@@ -367,16 +607,36 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   message: Unauthorized
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "errorMessage"
+                  ],
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   errorMessage: Housing unit not found.
   '/housing-units':
     post:
@@ -385,8 +645,43 @@ paths:
       requestBody:
         content:
           application/json:
-            schema:
-             example:
+              schema:
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "bedsCurrent",
+                      "projectId",
+                      "bedsCapacity",
+                      "familyUnit",
+                      "inService",
+                      "vacant"
+                    ],
+                    "properties": {
+                      "bedsCurrent": {
+                        "type": "integer"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "bedsCapacity": {
+                        "type": "integer"
+                      },
+                      "familyUnit": {
+                        "type": "boolean"
+                      },
+                      "inService": {
+                        "type": "boolean"
+                      },
+                      "vacant": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              example:
                 - bedsCurrent: 5
                   projectId: 9d278142-978d-461e-8aea-07d629e462e8
                   bedsCapacity: 10
@@ -404,7 +699,74 @@ paths:
          description: ''
          content:
           application/json:
-           schema:
+            schema:
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "dateCreated",
+                    "dateUpdated",
+                    "projectGroupCode",
+                    "userId",
+                    "deleted",
+                    "housingInventoryId",
+                    "bedsCurrent",
+                    "projectId",
+                    "bedsCapacity",
+                    "familyUnit",
+                    "inService",
+                    "vacant",
+                    "schemaYear"
+                  ],
+                  "properties": {
+                    "dateCreated": {
+                      "type": "string",
+                      "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                    },
+                    "dateUpdated": {
+                      "type": "string",
+                      "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                    },
+                    "projectGroupCode": {
+                      "type": "string",
+                    },
+                    "userId": {
+                      "type": "string",
+                      "format": "uuid",
+                    },
+                    "deleted": {
+                      "type": "boolean"
+                    },
+                    "housingInventoryId": {
+                      "type": "string",
+                      "format": "uuid",
+                    },
+                    "bedsCurrent": {
+                      "type": "integer"
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "format": "uuid",
+                    },
+                    "bedsCapacity": {
+                      "type": "integer"
+                    },
+                    "familyUnit": {
+                      "type": "boolean"
+                    },
+                    "inService": {
+                      "type": "boolean"
+                    },
+                    "vacant": {
+                      "type": "boolean"
+                    },
+                    "schemaYear": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
             example:
               - dateCreated: 08-16-2018 12:38:08.144
                 dateUpdated: 08-16-2018 12:38:08.144
@@ -475,100 +837,153 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  links:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        rel:
-                          type: string
-                        href:
-                          type: string
-                      required:
-                        - rel
-                        - href
-                  content:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        inactive:
-                          type: boolean
-                        housingInventoryId:
-                          type: string
-                        bedsCurrent:
-                          type: integer
-                        projectId:
-                          type: string
-                        userId:
-                          type: string
-                        bedsCapacity:
-                          type: integer
-                        familyUnit:
-                          type: boolean
-                        inService:
-                          type: boolean
-                        vacant:
-                          type: boolean
-                        aliasName:
-                          type: string
-                        project:
-                          required:
-                            - projectName
-                            - id
-                            - schemaYear
-                          type: object
-                          properties:
-                            projectName:
-                              type: string
-                            projectcommonName:
-                              type: string
-                            id:
-                              type: string
-                            schemaYear:
-                              type: string
-                        links:
-                          type: array
-                          items:
-                            required:
-                              - rel
-                              - href
-                            type: object
-                            properties:
-                              rel:
-                                type: string
-                              href:
-                                type: string
-                      required:
-                        - inactive
-                        - housingInventoryId
-                        - bedsCurrent
-                        - projectId
-                        - userId
-                        - bedsCapacity
-                        - familyUnit
-                        - inService
-                        - vacant
-                        - links
-                  page:
-                    required:
-                      - size
-                      - totalElements
-                      - totalPages
-                      - number
-                    type: object
-                    properties:
-                      size:
-                        type: integer
-                      totalElements:
-                        type: integer
-                      totalPages:
-                        type: integer
-                      number:
-                        type: integer
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "content",
+                    "page"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "rel",
+                          "href"
+                        ],
+                        "properties": {
+                          "rel": {
+                            "type": "string",
+                          },
+                          "href": {
+                            "type": "string",
+                          }
+                        }
+                      }
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "inactive",
+                          "housingInventoryId",
+                          "bedsCurrent",
+                          "projectId",
+                          "userId",
+                          "bedsCapacity",
+                          "familyUnit",
+                          "inService",
+                          "vacant",
+                          "aliasName",
+                          "project",
+                          "links"
+                        ],
+                        "properties": {
+                          "inactive": {
+                            "type": "boolean"
+                          },
+                          "housingInventoryId": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "bedsCurrent": {
+                            "type": "integer"
+                          },
+                          "projectId": {
+                            "type": "string",
+                          },
+                          "userId": {
+                            "type": "string",
+                          },
+                          "bedsCapacity": {
+                            "type": "integer"
+                          },
+                          "familyUnit": {
+                            "type": "boolean"
+                          },
+                          "inService": {
+                            "type": "boolean"
+                          },
+                          "vacant": {
+                            "type": "boolean"
+                          },
+                          "aliasName": {
+                            "type": "string",
+                          },
+                          "project": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "projectCommonName",
+                              "projectName",
+                              "schemaYear"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid",
+                              },
+                              "projectCommonName": {
+                                "type": "string",
+                              },
+                              "projectName": {
+                                "type": "string",
+                              },
+                              "schemaYear": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "links": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "rel",
+                                "href"
+                              ],
+                              "properties": {
+                                "rel": {
+                                  "type": "string",
+                                },
+                                "href": {
+                                  "type": "string",
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "object",
+                      "required": [
+                        "size",
+                        "totalElements",
+                        "totalPages",
+                        "number"
+                      ],
+                      "properties": {
+                        "size": {
+                          "type": "integer"
+                        },
+                        "totalElements": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "number": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              example:
                   links:
                     - rel: first
                       href: >-
@@ -629,16 +1044,36 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   message: Unauthorized
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "errorMessage"
+                  ],
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   errorMessage: no housing inventory related to project id.
   /housing-units/{housingunitid}:
     get:
@@ -657,57 +1092,121 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  required:
-                    - inactive
-                    - housingInventoryId
-                    - bedsCurrent
-                    - projectId
-                    - userId
-                    - bedsCapacity
-                    - familyUnit
-                    - inService
-                    - vacant
-                    - aliasName
-                  type: object
-                  properties:
-                    inactive:
-                      type: boolean
-                    housingInventoryId:
-                      type: string
-                    bedsCurrent:
-                      type: integer
-                    projectId:
-                      type: string
-                    userId:
-                      type: string
-                    bedsCapacity:
-                      type: integer
-                    familyUnit:
-                      type: boolean
-                    inService:
-                      type: boolean
-                    vacant:
-                      type: boolean
-                    aliasName:
-                      type: string
-                    project:
-                      type: object
-                      properties:
-                        projectName:
-                          type: string
-                        projectcommonName:
-                          type: string
-                        id:
-                          type: string
-                        schemaYear:
-                          type: string
-                      required:
-                        - projectName
-                        - projectcommonName
-                        - id
-                        - schemaYear
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "dateCreated",
+                      "dateUpdated",
+                      "projectGroupCode",
+                      "inactive",
+                      "housingInventoryId",
+                      "bedsCurrent",
+                      "projectId",
+                      "userId",
+                      "bedsCapacity",
+                      "familyUnit",
+                      "inService",
+                      "vacant",
+                      "aliasName",
+                      "schemaYear",
+                      "project",
+                      "links"
+                    ],
+                    "properties": {
+                      "dateCreated": {
+                        "type": "string",
+                        "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                      },
+                      "dateUpdated": {
+                        "type": "string",
+                        "format": "MM-dd-YYYY HH:mm:ss.SSS",
+                      },
+                      "projectGroupCode": {
+                        "type": "string",
+                      },
+                      "inactive": {
+                        "type": "boolean"
+                      },
+                      "housingInventoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "bedsCurrent": {
+                        "type": "integer"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "userId": {
+                        "type": "string",
+                        "format": "uuid",
+                      },
+                      "bedsCapacity": {
+                        "type": "integer"
+                      },
+                      "familyUnit": {
+                        "type": "boolean"
+                      },
+                      "inService": {
+                        "type": "boolean"
+                      },
+                      "vacant": {
+                        "type": "boolean"
+                      },
+                      "aliasName": {
+                        "type": "string",
+                      },
+                      "schemaYear": {
+                        "type": "integer"
+                      },
+                      "project": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "projectcommonname",
+                          "projectname",
+                          "schemaYear"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "projectcommonname": {
+                            "type": "string",
+                          },
+                          "projectname": {
+                            "type": "string",
+                          },
+                          "schemaYear": {
+                            "type": "string",
+                          }
+                        }
+                      },
+                      "links": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "rel",
+                            "href"
+                          ],
+                          "properties": {
+                            "rel": {
+                              "type": "string",
+                            },
+                            "href": {
+                              "type": "string",
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               example:
                   - dateCreated: 09-28-2016 09:43:38.317
                     dateUpdated: 09-28-2016 09:43:38.317
@@ -736,19 +1235,37 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   message: Unauthorized
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "errorMessage"
+                  ],
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                    }
+                  }
+                }
+              example:
                   errorMessage: Housing unit not found.
-
-
   /projects/{projectid}/eligibilityrequirements:
     parameters:
       - $ref: "#/components/parameters/projectid"
@@ -762,57 +1279,33 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                servesSingles:
-                  type: boolean
-                servesHouseholdWithChildren:
-                  type: boolean
-                incomeRequirement:
-                  type: boolean
-                alcoholAbuse:
-                  type: boolean
-                bothAlcoholAndDrugAbuse:
-                  type: boolean
-                chronicHealthCondition:
-                  type: boolean
-                developmental:
-                  type: boolean
-                drugAbuse:
-                  type: boolean
-                mentalHealthProblem:
-                  type: boolean
-                type:
-                  type: string
-                gender:
-                  type: integer
-                minAge:
-                  type: integer
-                maxAge:
-                  type: integer
-                minimumIncome:
-                  type: integer
-                maximumIncome:
-                  type: integer
-                zipCode:
-                  type: string
-                disability:
-                  type: string
-                chronicallyHomeless:
-                  type: string
-                race:
-                  type: string
-                ethnicity:
-                  type: string
-                veteranStatus:
-                  type: string
-                housingStatus:
-                  type: string
-                monthsHomelessPastThreeYears:
-                  type: string
-                residencePrior:
-                  type: string
-              example:
+              {
+                "type": "object",
+                "required": [
+                  "requirements"
+                ],
+                "properties": {
+                  "requirements": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                        },
+                        "value": {
+                          "type": "string",
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            example:
                 requirements:
                   - name: servesSingles
                     value: ' != true'
@@ -838,23 +1331,37 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  requirements:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        value:
-                          type: string
-                      required:
-                        - name
-                        - value
-                required:
-                  - requirements
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "eligibilityRequirementId",
+                    "requirements"
+                  ],
+                  "properties": {
+                    "eligibilityRequirementId": {
+                      "type": "string",
+                    },
+                    "requirements": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "value"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                          },
+                          "value": {
+                            "type": "string",
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              example:
                   eligibilityRequirementId: f580935c-01e0-4d51-9b8d-7590bf204058
                   requirements:
                     - name: servesSingles
@@ -878,20 +1385,29 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        message:
-                          type: string
-                      required:
-                        - message
-                    required:
-                     - error
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "message"
+                        ],
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              example:
                   error:
                     - message: Minimum Income must be greater than or equal to 0
                     - message: Maximum Age must be greater than 0
@@ -905,99 +1421,104 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  links:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        rel:
-                          type: string
-                        href:
-                          type: string
-                      required:
-                      - rel
-                      - href
-                  content:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        type:
-                          type: string
-                        gender:
-                          type: string
-                        servesSingles:
-                          type: boolean
-                        servesHouseholdWithChildren:
-                          type: boolean
-                        minAge:
-                          type: integer
-                        maxAge:
-                          type: integer
-                        incomeRequirement:
-                          type: boolean
-                        minimumIncome:
-                          type: integer
-                        maximumIncome:
-                          type: integer
-                        zipCode:
-                          type: string
-                        disability:
-                          type: string
-                        alcoholAbuse:
-                          type: boolean
-                        bothAlcoholAndDrugAbuse:
-                          type: boolean
-                        chronicHealthCondition:
-                          type: boolean
-                        developmental:
-                          type: boolean
-                        drugAbuse:
-                          type: boolean
-                        mentalHealthProblem:
-                          type: boolean
-                        chronicallyHomeless:
-                          type: string
-                        race:
-                          type: string
-                        ethnicity:
-                          type: string
-                        veteranStatus:
-                          type: string
-                        housingStatus:
-                          type: string
-                        monthsHomelessPastThreeYears:
-                          type: string
-                        residencePrior:
-                          type: string
-                        links:
-                          type: array
-                          items: {}
-                      required:
-                      - links
-                  page:
-                    type: object
-                    properties:
-                      size:
-                        type: integer
-                      totalElements:
-                        type: integer
-                      totalPages:
-                        type: integer
-                      number:
-                        type: integer
-                    required:
-                    - size
-                    - totalElements
-                    - totalPages
-                    - number
-                required:
-                - links
-                - content
-                - page
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "content",
+                    "page"
+                  ],
+                  "properties": {
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "rel",
+                          "href"
+                        ],
+                        "properties": {
+                          "rel": {
+                            "type": "string",
+                          },
+                          "href": {
+                            "type": "string",
+                          }
+                        }
+                      }
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "eligibilityRequirementId",
+                          "projectId",
+                          "requirements",
+                          "links"
+                        ],
+                        "properties": {
+                          "eligibilityRequirementId": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "projectId": {
+                            "type": "string",
+                            "format": "uuid",
+                          },
+                          "requirements": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "name",
+                                "value"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                },
+                                "value": {
+                                  "type": "string",
+                                }
+                              }
+                            }
+                          },
+                          "links": {
+                            "type": "array",
+                            "items":{
+                              
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "object",
+                      "required": [
+                        "size",
+                        "totalElements",
+                        "totalPages",
+                        "number"
+                      ],
+                      "properties": {
+                        "size": {
+                          "type": "integer"
+                        },
+                        "totalElements": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "number": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              example:
                   links:
                     - rel: self
                       href: >-
@@ -1055,23 +1576,33 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                requirements:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        value:
-                          type: string
-                      required:
-                        - name
-                        - value
-              required:
-                - requirements
-              example:
+              {
+                "type": "object",
+                "required": [
+                  "requirements"
+                ],
+                "properties": {
+                  "requirements": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                        },
+                        "value": {
+                          "type": "string",
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            example:
                 requirements:
                   - name: servesSingles
                     value: ' != true'
@@ -1105,59 +1636,43 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  eligibilityRequirementId:
-                    type: string
-                  gender:
-                    type: string
-                  servesSingles:
-                    type: boolean
-                  servesHouseholdWithChildren:
-                    type: boolean
-                  minAge:
-                    type: integer
-                  maxAge:
-                    type: integer
-                  incomeRequirement:
-                    type: boolean
-                  minimumIncome:
-                    type: integer
-                  maximumIncome:
-                    type: integer
-                  zipCode:
-                    type: string
-                  disability:
-                    type: string
-                  alcoholAbuse:
-                    type: boolean
-                  bothAlcoholAndDrugAbuse:
-                    type: boolean
-                  chronicHealthCondition:
-                    type: boolean
-                  developmental:
-                    type: boolean
-                  drugAbuse:
-                    type: boolean
-                  mentalHealthProblem:
-                    type: boolean
-                  chronicallyHomeless:
-                    type: string
-                  race:
-                    type: string
-                  ethnicity:
-                    type: string
-                  veteranStatus:
-                    type: string
-                  housingStatus:
-                    type: string
-                  monthsHomelessPastThreeYears:
-                    type: string
-                  residencePrior:
-                    type: string
-                required:
-                  - eligibilityRequirementId
-                example:
+                {
+                  "type": "object",
+                  "required": [
+                    "eligibilityRequirementId",
+                    "projectId",
+                    "requirements"
+                  ],
+                  "properties": {
+                    "eligibilityRequirementId": {
+                      "type": "string",
+                        "format": "uuid",
+                    },
+                    "projectId": {
+                      "type": "string",
+                        "format": "uuid",
+                    },
+                    "requirements": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "value"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                          },
+                          "value": {
+                            "type": "string",
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              example:
                   eligibilityRequirementId: 0effc53e-cd9a-48b1-af22-e90b7d860e77
                   projectId: 893ecb78-84be-11e6-ae22-56b6b6499611
                   requirements:
