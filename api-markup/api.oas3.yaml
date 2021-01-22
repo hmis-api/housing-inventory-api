@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Housing Inventory
-  version: 2.1.0
+  version: 2.1.1
   contact:
     name: API Source
     email: support@hslynk.com
@@ -47,6 +47,9 @@ paths:
                         "type": "string",
                         "format": "uuid",
                       },
+                      "name": {
+                        "type": "string"
+                      },
                       "bedsCapacity": {
                         "type": "integer"
                       },
@@ -69,6 +72,7 @@ paths:
                   familyUnit: false
                   inService: false
                   vacant: true
+                  name: 'unit name'
                 - bedsCurrent: 5
                   projectId: f9748a7b-80ac-4ffd-86f7-c8e71416502f
                   bedsCapacity: 10
@@ -126,6 +130,9 @@ paths:
                     "bedsCurrent": {
                       "type": "integer"
                     },
+                     "name": {
+                        "type": "string"
+                      },
                     "projectId": {
                       "type": "string",
                       "format": "uuid",
@@ -162,6 +169,7 @@ paths:
                 inService: false
                 vacant: true
                 schemaYear: 2014
+                name: 'test name'
               - dateCreated: 08-16-2018 12:38:08.162
                 dateUpdated: 08-16-2018 12:38:08.162
                 projectGroupCode: PG0001
@@ -271,6 +279,9 @@ paths:
                           },
                           "bedsCurrent": {
                             "type": "integer"
+                          },
+                          "name": {
+                             "type": "string"
                           },
                           "projectId": {
                             "type": "string",
@@ -388,7 +399,7 @@ paths:
                       familyUnit: false
                       inService: false
                       vacant: false
-                      aliasName: Test Name
+                      name: Test Name
                       project:
                         id: 3189abda-32bd-4330-8839-8c6f723f1e73
                         projectCommonName: READ_TEST_PROJECT
@@ -516,6 +527,9 @@ paths:
                       "bedsCurrent": {
                         "type": "integer"
                       },
+                       "name": {
+                        "type": "string"
+                      },
                       "projectId": {
                         "type": "string",
                         "format": "uuid",
@@ -600,7 +614,7 @@ paths:
                     familyUnit: false
                     inService: false
                     vacant: false
-                    aliasName: test name
+                    name: test name
                     schemaYear: 2014
                     project:
                       id: 3189abda-32bd-4330-8839-8c6f723f1e73
